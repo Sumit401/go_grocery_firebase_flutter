@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "207415847839",
+    "project_id": "cabs-9b6ed",
+    "storage_bucket": "cabs-9b6ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207415847839:android:5778864fcf4cd674d42baa",
+        "android_client_info": {
+          "package_name": "com.sumit401.cabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207415847839-oap3bgbc96r4mcv1su56379eq4nhi96l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sumit401.cabs",
+            "certificate_hash": "349855f7fc5fe0e2c126e208c4ecd12fd2c5d171"
+          }
+        },
+        {
+          "client_id": "207415847839-7196422mmqck5d4e5pru5mmd2dcg9jho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSyK8URlIeCImCT-l1HZMxYF9fqSnJA1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207415847839-7196422mmqck5d4e5pru5mmd2dcg9jho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
