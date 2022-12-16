@@ -22,24 +22,24 @@ class _loginState extends State<login> {
     return (Scaffold(
       //resizeToAvoidBottomInset: false,
       //appBar: AppBar(title: Text("Login Page")),
-      body: SingleChildScrollView(
-        child: Container(
-          transformAlignment: Alignment.center,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  stops: [0.05,0.2,0.6,1],
-                  colors: [
-                    Colors.deepOrange,
-                    Colors.orange,
-                    Colors.blue,
-                    Colors.blueGrey,
-                  ])),
-          alignment: Alignment.bottomCenter,
-          //color: Colors.red,
-          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 00),
+      body: Container(
+        transformAlignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [0.05,0.2,0.6,1],
+                colors: [
+                  Colors.deepOrange,
+                  Colors.orange,
+                  Colors.blue,
+                  Colors.blueGrey,
+                ])),
+        alignment: Alignment.center,
+        //color: Colors.red,
+        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+        child: SingleChildScrollView(
           child: SizedBox(
             width: 500,
             child: Column(
