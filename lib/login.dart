@@ -3,6 +3,7 @@ import 'package:cabs/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -29,13 +30,18 @@ class _loginState extends State<login> {
             gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                stops: [0.05,0.2,0.6,1],
+                stops: [
+              0.05,
+              0.2,
+              0.6,
+              1
+            ],
                 colors: [
-                  Colors.deepOrange,
-                  Colors.orange,
-                  Colors.blue,
-                  Colors.blueGrey,
-                ])),
+              Colors.deepOrange,
+              Colors.orange,
+              Colors.blue,
+              Colors.blueGrey,
+            ])),
         alignment: Alignment.center,
         //color: Colors.red,
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
@@ -88,34 +94,43 @@ class _loginState extends State<login> {
                     onPressed: () {
                       FirebaseAuth.instance
                           .signInWithEmailAndPassword(
-                          email: email, password: password)
+                              email: email, password: password)
                           .then(
-                            (value) {
-                          print("Login Successful");
+                        (value) {
+                          Fluttertoast.showToast(
+                              msg: "Login Successful",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, homepage.route).onError(
-                                  (error, stackTrace) => print(error.toString()));
+                          Navigator.pushNamed(context, homepage.route);
+                        },
+                      ).onError(
+                        (error, stackTrace) {
+                          print(error.toString());
                         },
                       );
                     },
                     child: Text("Login"),
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(Colors.green),
-                        textStyle: MaterialStatePropertyAll(
-                            TextStyle(fontSize: 20, fontWeight:FontWeight.bold)))),
+                        textStyle: MaterialStatePropertyAll(TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)))),
                 InkWell(
                   onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, register.route);
-                    },
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, register.route);
+                  },
                   child: Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Center(
-                          child: Text("Not a User? Click here Register to Us!",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15))),
+                        child: Text("Not a User? Click here Register to Us!",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15))),
                   ),
                 )
               ],

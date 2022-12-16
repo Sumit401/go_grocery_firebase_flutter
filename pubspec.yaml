@@ -40,10 +40,12 @@ dependencies:
   firebase_core: ^2.4.0
   google_sign_in: ^5.4.2
   cloud_firestore: ^4.2.0
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

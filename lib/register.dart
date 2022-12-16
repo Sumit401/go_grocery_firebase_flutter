@@ -2,6 +2,7 @@ import 'package:cabs/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class register extends StatefulWidget {
   const register({Key? key}) : super(key: key);
@@ -103,6 +104,15 @@ class _registerState extends State<register> {
                                 email: email, password: password)
                             .then((value) {
                           print("Registration Successful");
+                          Fluttertoast.showToast(
+                              msg: "Registration Successful",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, login.route);
                         }).onError((error, stackTrace) {
                           print(error.toString());
                         });
