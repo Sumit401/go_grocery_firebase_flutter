@@ -1,5 +1,6 @@
 import 'package:cabs/homepage.dart';
 import 'package:cabs/register.dart';
+import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,8 +16,11 @@ class login extends StatefulWidget {
 
 class _loginState extends State<login> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String email = "";
-  String password = "";
+
+  TextEditingController texteditingcontroller_email =
+      new TextEditingController();
+  TextEditingController texteditingcontroller_password =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +43,8 @@ class _loginState extends State<login> {
                 colors: [
               Colors.deepOrange,
               Colors.orange,
+              Colors.blueAccent,
               Colors.blue,
-              Colors.blueGrey,
             ])),
         alignment: Alignment.center,
         //color: Colors.red,
@@ -60,41 +64,14 @@ class _loginState extends State<login> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: "Email", border: InputBorder.none),
-                    onChanged: (value) {
-                      email = value;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: "Password", border: InputBorder.none),
-                    onChanged: (value) {
-                      password = value;
-                    },
-                  ),
-                ),
+                formfield_for_email("Email", texteditingcontroller_email),
+                formfield_for_password("Password", texteditingcontroller_password),
                 ElevatedButton(
                     onPressed: () {
                       FirebaseAuth.instance
                           .signInWithEmailAndPassword(
-                              email: email, password: password)
+                              email: texteditingcontroller_email.text,
+                              password: texteditingcontroller_password.text)
                           .then(
                         (value) {
                           Fluttertoast.showToast(
@@ -138,30 +115,8 @@ class _loginState extends State<login> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: const ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.white),),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/images/google_logo.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Login With Google",
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ),
+                     google_sign_in_buttons(),
+                      facebook_sign_in_button()
                     ],
                   ),
                 ),

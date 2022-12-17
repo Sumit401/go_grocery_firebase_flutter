@@ -1,4 +1,5 @@
 import 'package:cabs/login.dart';
+import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,9 +15,15 @@ class register extends StatefulWidget {
 
 class _registerState extends State<register> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = "";
-  String email = "";
-  String password = "";
+
+  GlobalKey<FormState> formvalidationkey = GlobalKey<FormState>();
+
+  TextEditingController texteditingcontroller_email = TextEditingController();
+
+  TextEditingController texteditingcontroller_password =
+      TextEditingController();
+
+  TextEditingController texteditingcontroller_name = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,138 +45,87 @@ class _registerState extends State<register> {
         child: SingleChildScrollView(
           child: SizedBox(
             width: 500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  child: const Text("Register to Us",
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        labelText: "Name", border: InputBorder.none),
-                    onChanged: (value) {
-                      name = value;
-                    },
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formvalidationkey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    child: const Text("Register to Us",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        labelText: "Email", border: InputBorder.none),
-                    onChanged: (value) {
-                      email = value;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        labelText: "Password", border: InputBorder.none),
-                    onChanged: (value) {
-                      password = value;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          print("Registration Successful");
-                          Fluttertoast.showToast(
-                              msg: "Registration Successful",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, login.route);
-                        }).onError((error, stackTrace) {
-                          print(error.toString());
-                        });
-                      },
-                      child: Text("Register Now"),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.lightGreen))),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, login.route);
-                  },
-                  child: Container(
+
+                  /// Form Filed for name//////////////////////////////////////////
+                  formfield_for_name("Name", texteditingcontroller_name),
+
+                  /// Form Field for Email////////////////////////////////////////
+                  formfield_for_email("Email", texteditingcontroller_email),
+
+                  /// form Field for Password/////////////////////////////////////
+                  formfield_for_password(
+                      "Password", texteditingcontroller_password),
+                  Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: Center(
-                        child: Text("Already Registered? Click here to Login",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15))),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: const ButtonStyle(
-                            shape: MaterialStatePropertyAll(CircleBorder()),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: texteditingcontroller_email.text,
+                                  password: texteditingcontroller_password.text)
+                              .then((value) {
+                            print("Registration Successful");
+                            Fluttertoast.showToast(
+                                msg: "Registration Successful",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, login.route);
+                          }).onError((error, stackTrace) {
+                            print(error.toString());
+                          });
+                        },
+                        child: Text("Register Now"),
+                        style: ButtonStyle(
                             backgroundColor:
-                                MaterialStatePropertyAll(Colors.white)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/images/google_logo.png",
-                              width: 50,
-                              height: 50,
-                            ),
-                            /*SizedBox(width: 10),
-                        Text(
-                          "Login With Google",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20),)*/
-                          ],
-                        ),
-                      ),
-                    ],
+                                MaterialStatePropertyAll(Colors.lightGreen))),
                   ),
-                ),
-              ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, login.route);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Center(
+                          child: Text("Already Registered? Click here to Login",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15))),
+                    ),
+                  ),
+                  // Container For Facebook and Google SignIn buttons...........//////////////
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        google_sign_in_buttons(),
+                        facebook_sign_in_button()
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
