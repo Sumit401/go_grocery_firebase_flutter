@@ -136,7 +136,39 @@ class _registerState extends State<register> {
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15))),
                   ),
-                )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: const ButtonStyle(
+                            shape: MaterialStatePropertyAll(CircleBorder()),
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/images/google_logo.png",
+                              width: 50,
+                              height: 50,
+                            ),
+                            /*SizedBox(width: 10),
+                        Text(
+                          "Login With Google",
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20),)*/
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

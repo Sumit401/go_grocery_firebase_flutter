@@ -28,8 +28,8 @@ class _loginState extends State<login> {
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
                 stops: [
               0.05,
               0.2,
@@ -54,7 +54,7 @@ class _loginState extends State<login> {
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20),
-                  child: Text("Welcome Back! ",
+                  child: const Text("Welcome Back! ",
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _loginState extends State<login> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Email", border: InputBorder.none),
                     onChanged: (value) {
                       email = value;
@@ -83,7 +83,7 @@ class _loginState extends State<login> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Password", border: InputBorder.none),
                     onChanged: (value) {
                       password = value;
@@ -114,7 +114,7 @@ class _loginState extends State<login> {
                       );
                     },
                     child: Text("Login"),
-                    style: ButtonStyle(
+                    style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(Colors.green),
                         textStyle: MaterialStatePropertyAll(TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)))),
@@ -125,14 +125,46 @@ class _loginState extends State<login> {
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: Center(
+                    child: const Center(
                         child: Text("Not a User? Click here Register to Us!",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15))),
                   ),
-                )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white),),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/images/google_logo.png",
+                              width: 30,
+                              height: 30,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Login With Google",
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
