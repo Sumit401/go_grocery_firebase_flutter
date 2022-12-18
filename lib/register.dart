@@ -113,7 +113,7 @@ class _registerState extends State<register> {
                                   fontSize: 15))),
                     ),
                   ),
-                  // Container For Facebook and Google SignIn buttons...........//////////////
+                  // Container For Facebook and Google SignIn buttons.......................///
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Row(
