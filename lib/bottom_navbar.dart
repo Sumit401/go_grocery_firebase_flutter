@@ -21,7 +21,7 @@ class _bottom_navbarState extends State<bottom_navbar> {
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.house), label: "Home"),
         BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.clipboardCheck), label: "Activity"),
+            icon: Icon(FontAwesomeIcons.cartShopping), label: "Cart"),
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.userTie), label: "Profile"),
       ],

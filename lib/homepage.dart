@@ -1,7 +1,8 @@
 import 'package:cabs/bottom_navbar.dart';
-import 'package:cabs/vehicles_list.dart';
+import 'package:cabs/fruits_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -12,23 +13,71 @@ class homepage extends StatefulWidget {
 }
 
 class _homepageState extends State<homepage> {
-  var fire_storedb = FirebaseFirestore.instance.collection("fruits").snapshots();
+
+  String value="vegetables";
+  var items = ["vegetables", "fruits", "Dairy", "Cereals", "Household"];
+  String? dropdownvalue = "vegetables";
+  var fire_storedb = FirebaseFirestore.instance.collection("vegetables").snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: bottom_navbar(),
+      bottomNavigationBar: const bottom_navbar(),
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Image.asset(
+            "assets/images/app_logo.png",
+            width: 70,
+            height: 70,
+          ),
+        ),
+        elevation: 20,
+       titleSpacing: 30,
+        title: Theme(
+          data: ThemeData.light(),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              onChanged: (value1) {
+                setState(() {
+                  value=value1!;
+                  dropdownvalue=value1;
+                  fire_storedb=FirebaseFirestore.instance.collection(value).snapshots();
+                });
+              },
+              items: items
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e,
+                          style: TextStyle(fontWeight: FontWeight.w700,fontSize: 20)),
+                    ),
+                  )
+                  .toList(),
+              isExpanded: true,
+              icon:
+                  const Icon(FontAwesomeIcons.anglesDown, color: Colors.black),
+              iconSize: 25,
+              value: dropdownvalue,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+      ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.center,
         child: StreamBuilder(
             stream: fire_storedb,
             builder: ((context, snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
+              if (!snapshot.hasData) return const CircularProgressIndicator();
               return (ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  return (list_of_vehicles(snapshot,index));
+                  return (fruits_list(snapshot, index, context));
                 },
               ));
             })),
