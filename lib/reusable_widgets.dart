@@ -88,6 +88,7 @@ Widget google_sign_in_buttons(BuildContext context) {
               SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
               sharedPreferences.setString("email", (FirebaseAuth.instance.currentUser?.email).toString());
               sharedPreferences.setString("name", (FirebaseAuth.instance.currentUser?.displayName).toString());
+              sharedPreferences.setString("user_image", (FirebaseAuth.instance.currentUser?.photoURL).toString());
               Navigator.pop(context);
               Navigator.pushNamed(context, homepage.route);
             }

@@ -1,5 +1,5 @@
 import 'package:cabs/bottom_navbar.dart';
-import 'package:cabs/fruits_list.dart';
+import 'package:cabs/grocery_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -66,18 +66,18 @@ class _homepageState extends State<homepage> {
         centerTitle: true,
       ),
       body: Container(
-        margin: const EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 2),
         alignment: Alignment.center,
         child: StreamBuilder(
             stream: fire_storedb,
             builder: ((context, snapshot) {
               if (!snapshot.hasData) return const CircularProgressIndicator();
               return (ListView.builder(
-                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
+                scrollDirection: Axis.vertical,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  return (fruits_list(snapshot, index, context));
+                  return (grocery_list(snapshot, index, context));
                 },
               ));
             })),
