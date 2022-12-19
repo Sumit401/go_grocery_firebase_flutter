@@ -12,7 +12,7 @@ class homepage extends StatefulWidget {
 }
 
 class _homepageState extends State<homepage> {
-  var fire_storedb = FirebaseFirestore.instance.collection("cars").snapshots();
+  var fire_storedb = FirebaseFirestore.instance.collection("fruits").snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,6 @@ class _homepageState extends State<homepage> {
                 },
               ));
             })),
-        /* ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, login.route);
-                },
-                child: Text("Logout")),*/
       ),
     );
   }

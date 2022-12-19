@@ -4,7 +4,7 @@ import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -21,6 +21,7 @@ class _loginState extends State<login> {
       new TextEditingController();
   TextEditingController texteditingcontroller_password =
       TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +74,18 @@ class _loginState extends State<login> {
                               email: texteditingcontroller_email.text,
                               password: texteditingcontroller_password.text)
                           .then(
-                        (value) {
-                          Fluttertoast.showToast(
-                              msg: "Login Successful",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                        (value) async {
+                          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          sharedPreferences.setString("email", texteditingcontroller_email.text.toString());
+
+                          short_flutter_toast("Login Successful");
                           Navigator.pop(context);
                           Navigator.pushNamed(context, homepage.route);
                         },
                       ).onError(
                         (error, stackTrace) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          long_flutter_toast("Invalid Email or Password");
                           print(error.toString());
                         },
                       );
@@ -115,7 +115,7 @@ class _loginState extends State<login> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                     google_sign_in_buttons(),
+                     google_sign_in_buttons(context),
                       facebook_sign_in_button()
                     ],
                   ),

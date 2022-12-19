@@ -18,14 +18,6 @@ Widget list_of_vehicles(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Text(snapshot.data!.docs[index]['Name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 23,
-                    )),
-              ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -64,16 +56,12 @@ Widget list_of_vehicles(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text((snapshot.data!.docs[index]['Fuel Type']),
+                                Text((snapshot.data!.docs[index]['name']),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12,
+                                      fontSize: 15,
                                     )),
-                                const Text(" Vehicle",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    )),
+
                               ],
                             ),
                           ),
@@ -83,61 +71,22 @@ Widget list_of_vehicles(
                               children: [
                                 Text(
                                     (snapshot.data!.docs[index]
-                                        ['Seating Capacity']),
+                                        ['price']),
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    )),
-                                const Text(" Seater",
-                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12,
                                     )),
                               ],
                             ),
                           ),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                    (snapshot.data!.docs[index]
-                                    ['Airbags']),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    )),
-                                const Text(" Airbags",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    )),
-                              ],
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 20,bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("INR ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                    Text(
-                        (snapshot.data!.docs[index]
-                        ['price']),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                        )),
-                    Text(" Per Day ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                  ],
-                ),
-              ),
+
             ],
           ),
         ),

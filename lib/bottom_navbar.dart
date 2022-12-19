@@ -1,3 +1,5 @@
+import 'package:cabs/homepage.dart';
+import 'package:cabs/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -30,6 +32,15 @@ class _bottom_navbarState extends State<bottom_navbar> {
   }
   void on_item_tapped(int index){
     setState(() {
+      if(index==0){
+        Navigator.pop(context);
+        Navigator.pushNamed(context, homepage.route);
+      }else if(index==1){
+
+      }else if(index==2){
+        Navigator.pop(context);
+        Navigator.pushNamed(context, profile.route);
+      }
       current_index_bottom_navbar=index;
     });
   }

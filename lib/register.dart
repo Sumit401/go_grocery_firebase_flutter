@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class register extends StatefulWidget {
   const register({Key? key}) : super(key: key);
@@ -78,18 +79,17 @@ class _registerState extends State<register> {
                               .createUserWithEmailAndPassword(
                                   email: texteditingcontroller_email.text,
                                   password: texteditingcontroller_password.text)
-                              .then((value) {
+                              .then((value) async{
                             print("Registration Successful");
-                            Fluttertoast.showToast(
-                                msg: "Registration Successful",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                            sharedPreferences.setString("email", texteditingcontroller_email.text);
+                            sharedPreferences.setString("name", texteditingcontroller_name.text);
+                            short_flutter_toast("Registration Successful");
                             Navigator.pop(context);
                             Navigator.pushNamed(context, login.route);
                           }).onError((error, stackTrace) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            long_flutter_toast("User Already Registered! Please Login");
                             print(error.toString());
                           });
                         },
@@ -119,7 +119,7 @@ class _registerState extends State<register> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        google_sign_in_buttons(),
+                        google_sign_in_buttons(context),
                         facebook_sign_in_button()
                       ],
                     ),

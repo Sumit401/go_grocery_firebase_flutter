@@ -1,22 +1,35 @@
 import 'package:cabs/homepage.dart';
 import 'package:cabs/login.dart';
+import 'package:cabs/profile.dart';
 import 'package:cabs/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  email = sharedPreferences.getString("email").toString();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+var email="";
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -35,9 +48,11 @@ class MyApp extends StatelessWidget {
         register.route: (_) => register(),
         login.route:(_)=> login(),
         homepage.route:(_)=>homepage(),
+        profile.route:(_)=>profile(),
       },
-      home: register(),
-    );
+      home: email=="null" ? login() : homepage());
 
   }
+
+
 }
