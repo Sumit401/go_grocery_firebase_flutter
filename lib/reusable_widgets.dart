@@ -1,4 +1,5 @@
 import 'package:cabs/homepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -151,4 +152,28 @@ google_sign_out() async{
   google_signin.signOut();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.remove("email");
+}
+
+
+String get_value(String? docid){
+  String s="0";
+  get_quantity(docid).then((value) {
+    s = value;
+  });
+  return s;
+}
+
+Future<String> get_quantity(String? docid) async{
+
+  String s="";
+  FirebaseFirestore.instance.collection("Cart").get().then((value) {
+    value.docs.forEach((element) { 
+      FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
+        if(value2.data()!['grocery_id']==docid)
+        s=(value2.data()!['quantity'])
+      });
+    });
+  });
+
+  return s;
 }

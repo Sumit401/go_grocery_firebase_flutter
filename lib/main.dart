@@ -2,6 +2,7 @@ import 'package:cabs/homepage.dart';
 import 'package:cabs/login.dart';
 import 'package:cabs/profile.dart';
 import 'package:cabs/register.dart';
+import 'package:cabs/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         login.route:(_)=> login(),
         homepage.route:(_)=>homepage(),
         profile.route:(_)=>profile(),
+        cart_item.route:(_)=>cart_item()
       },
       home: email=="null" ? login() : homepage());
 

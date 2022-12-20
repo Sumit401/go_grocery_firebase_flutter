@@ -1,3 +1,4 @@
+import 'package:cabs/cart_item.dart';
 import 'package:cabs/homepage.dart';
 import 'package:cabs/profile.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _bottom_navbarState extends State<bottom_navbar> {
         Navigator.pop(context);
         Navigator.pushNamed(context, homepage.route);
       }else if(index==1){
+        Navigator.pop(context);
+        Navigator.pushNamed(context, cart_item.route);
 
       }else if(index==2){
         Navigator.pop(context);

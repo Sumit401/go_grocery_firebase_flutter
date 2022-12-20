@@ -18,6 +18,7 @@ class _homepageState extends State<homepage> {
   var items = ["vegetables", "fruits", "Dairy", "Cereals", "Household"];
   String? dropdownvalue = "vegetables";
   var fire_storedb = FirebaseFirestore.instance.collection("vegetables").snapshots();
+  //var fire_storedb2= FirebaseFirestore.instance.collection("Cart").snapshots();
 
   @override
   Widget build(BuildContext context) {

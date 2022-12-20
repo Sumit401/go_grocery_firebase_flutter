@@ -1,7 +1,11 @@
+import 'package:cabs/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+var cart_value=0;
+
 
 Widget grocery_list(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
     int index, BuildContext context) {
@@ -23,7 +27,6 @@ Widget grocery_list(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
                         snapshot.data!.docs[index]['image'].toString(),
                         height: 100,
                         width: 100)),
-
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: Column(
@@ -42,7 +45,7 @@ Widget grocery_list(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Price: ",
+                          const Text("Price: ",
                               style:
                               TextStyle(fontWeight: FontWeight.w700)),
                           Text("\u{20B9}"),
@@ -56,12 +59,48 @@ Widget grocery_list(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    Icon(FontAwesomeIcons.minus),
+                  children:  [
+                    InkWell(child: Icon(FontAwesomeIcons.minus),
+                    onTap: () async {
+
+                      String? grocery_id = snapshot.data?.docs[index].reference.id;
+                            FirebaseFirestore.instance
+                                .collection("Cart")
+                                .where("grocery_id", isEqualTo: grocery_id)
+                                .get()
+                                .then((value) {
+                              value.docs.forEach((element) {
+                                FirebaseFirestore.instance
+                                    .collection("Cart")
+                                    .doc(element.id)
+                                    .delete()
+                                    .then((value) {
+                                  print("Success!");
+                                });
+                              });
+                            });
+                          }),
                     VerticalDivider(width: 10,),
-                    Text("0",style: TextStyle(fontSize: 20),),
+                    Text((get_value(snapshot.data?.docs[index].reference.id)),style: TextStyle(fontSize: 20)),
                     VerticalDivider(width: 10,),
-                    Icon(FontAwesomeIcons.plus),
+                    InkWell(child: Icon(FontAwesomeIcons.plus),onTap: () async {
+                      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                      var email = sharedPreferences.getString("email").toString();
+                      String? docid = snapshot.data?.docs[index].reference.id;
+                      Map<String,String?> data_to_save={
+                        "grocery_id":docid,
+                        "quantity":"1",
+                        "email":email,
+                        "name": snapshot.data!.docs[index]['name'],
+                        "price": snapshot.data!.docs[index]['price'],
+                        "si": snapshot.data!.docs[index]['si'],
+                        "image": snapshot.data!.docs[index]['image'],
+
+                      };
+                      var collectionRef = await FirebaseFirestore.instance
+                          .collection("Cart");
+                      collectionRef.add(data_to_save);
+                    },),
                   ],
                 ),
               ],
