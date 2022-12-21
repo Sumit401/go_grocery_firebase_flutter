@@ -7,6 +7,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 final firebase_auth=FirebaseAuth.instance;
 final google_signin=GoogleSignIn();
 
@@ -155,18 +156,24 @@ google_sign_out() async{
 }
 
 
-String get_value(String? docid){
-  String s="0";
-  get_quantity(docid).then((value) {
-    s = value;
-  });
-  return s;
-}
 
-Future<String> get_quantity(String? docid) async{
 
-  String s="";
-  FirebaseFirestore.instance.collection("Cart").get().then((value) {
+Future<int> cart(String? id) async{
+  int cart_value= 0;
+  var cart = await FirebaseFirestore.instance.collection("Cart").get();
+  for (var element in cart.docs) {
+    FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
+      if(value2.data()!['grocery_id']==id){
+        cart_value = (value2.data()!['quantity']),
+       // print(cart_value)
+      }
+    });
+  }
+    //print("Return $cart_value");
+    return cart_value;
+  }
+
+  /*FirebaseFirestore.instance.collection("Cart").get().then((value) {
     value.docs.forEach((element) { 
       FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
         if(value2.data()!['grocery_id']==docid)
@@ -174,6 +181,5 @@ Future<String> get_quantity(String? docid) async{
       });
     });
   });
+  )*/
 
-  return s;
-}

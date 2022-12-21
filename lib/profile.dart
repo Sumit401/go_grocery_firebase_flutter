@@ -1,6 +1,5 @@
 import 'package:cabs/bottom_navbar.dart';
 import 'package:cabs/reusable_widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,13 +56,27 @@ class _profileState extends State<profile> {
       ),
       bottomNavigationBar: bottom_navbar(),
       body: Container(
-        alignment: Alignment.center,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        margin: EdgeInsets.only(top: 20),
+        alignment: Alignment.topCenter,
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25), color: Colors.blue),
-              child: Image.network(user_image)),
-          Text(user_email),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25), color: Colors.blue),
+            child: ClipOval(
+              child: FadeInImage.assetNetwork(
+                fadeInDuration: Duration(seconds: 1),
+                placeholderFit: BoxFit.fill,
+                placeholder: ('assets/images/user_img.jpg'),
+                fit: BoxFit.fill,
+                image: user_image,
+                height: 100,
+                width: 100,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+              child: Text(user_email)),
         ]),
       ),
     );

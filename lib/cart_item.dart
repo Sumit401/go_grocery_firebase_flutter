@@ -1,4 +1,5 @@
 import 'package:cabs/bottom_navbar.dart';
+import 'package:cabs/get_cart_items_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,32 +36,21 @@ class _cart_itemState extends State<cart_item> {
               height: 70,
             ),
           ),
-          title: Text("Cart", style: TextStyle(color: Colors.black)),
+          title: Text("Your Cart", style: TextStyle(color: Colors.black)),
           centerTitle: true,
           backgroundColor: Colors.white),
-      body: Container(
-        child: StreamBuilder(stream:fire_storedb,builder:(context, snapshot) {
-          if (!snapshot.hasData) return const CircularProgressIndicator();
-            return (ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-               if(snapshot.data!.docs[index]['email'].toString()==user_email){
-
-                 return(
-                     Row(children: [
-                       Text(snapshot.data!.docs[index]['name']),
-                       Text(snapshot.data!.docs[index]['price']),
-                       Text(snapshot.data!.docs[index]['si']),
-
-                     ],)
-                 );
-               }else{
-                 return Container();
-               }
-              },
-            ));
-          },
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(child: first_listview(),
+          height: MediaQuery.of(context).size.height/2,),
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height/2,
+              child: Container(),
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: bottom_navbar(),
     );
@@ -72,6 +62,32 @@ class _cart_itemState extends State<cart_item> {
     setState(() {
       user_email=email;
     });
+  }
+  Widget first_listview(){
+    return Container(
+      alignment: Alignment.center,
+      child: Card(
+        child: StreamBuilder(stream:fire_storedb,builder:(context, snapshot) {
+          if (!snapshot.hasData) return const CircularProgressIndicator();
+          return (ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              if(snapshot.data!.docs[index]['email'].toString()==user_email){
+                return(get_cart_items_list(snapshot,index));
+              }else{
+                return Container(
+                  alignment: Alignment.center,
+                  child: Text("Your cart is empty"),
+                );
+              }
+            },
+          ));
+        },
+        ),
+      ),
+    );
   }
 }
 /*

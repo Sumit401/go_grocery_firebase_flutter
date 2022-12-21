@@ -20,6 +20,7 @@ class _homepageState extends State<homepage> {
   var fire_storedb = FirebaseFirestore.instance.collection("vegetables").snapshots();
   //var fire_storedb2= FirebaseFirestore.instance.collection("Cart").snapshots();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +79,24 @@ class _homepageState extends State<homepage> {
                 scrollDirection: Axis.vertical,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  return (grocery_list(snapshot, index, context));
+                  return (grocery_list(snapshot, index,context));
                 },
               ));
             })),
       ),
     );
   }
+
+
+  /*void setState(VoidCallback fn) {
+    super.setState(fn);
+    FirebaseFirestore.instance.collection("Cart").get().then((value) {
+      value.docs.forEach((element) {
+        FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
+          if(value2.data()!['grocery_id']==docid)
+            cart_value = (value2.data()!['quantity'])
+        });
+      });
+    });
+  }*/
 }
