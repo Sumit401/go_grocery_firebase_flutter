@@ -23,7 +23,8 @@ Widget get_cart_items_list(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Rs "),
+                    Text("Price: ",style: TextStyle(fontWeight: FontWeight.w700),),
+                    Text(" \u{20B9} "),
                     Text(snapshot.data!.docs[index]['price'].toString()),
                     Text(" / "),
                     Text(snapshot.data!.docs[index]['si']),
