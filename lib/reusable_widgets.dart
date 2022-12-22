@@ -1,3 +1,4 @@
+
 import 'package:cabs/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -157,19 +158,22 @@ google_sign_out() async{
 
 
 
-
-Future<int> cart(String? id) async{
-  int cart_value= 0;
-  var cart = await FirebaseFirestore.instance.collection("Cart").get();
-  for (var element in cart.docs) {
-    FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
-      if(value2.data()!['grocery_id']==id){
-        cart_value = (value2.data()!['quantity']),
-       // print(cart_value)
-      }
+int cart_value = 0;
+Future<int> cart() async{
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  var email = sharedPreferences.getString("email").toString();
+  FirebaseFirestore.instance.collection("Cart").get().then((value) {
+    value.docs.forEach((element) {
+      FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
+        if(value2.data()!['email']==email){
+          cart_value = (value2.data()!['quantity']),
+          print(cart_value)
+        }
+      });
     });
-  }
+  });
     //print("Return $cart_value");
+    //print(cart_value);
     return cart_value;
   }
 

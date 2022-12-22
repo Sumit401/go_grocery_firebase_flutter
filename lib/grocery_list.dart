@@ -93,7 +93,7 @@ Widget grocery_list(
                         width: 10,
                       ),
                       // For Cart Count
-                      FutureBuilder(
+                      /*FutureBuilder(
                           future: cart(snapshot.data?.docs[index].reference.id),
                           builder: (BuildContext context,
                               AsyncSnapshot<int> snapshot) {
@@ -102,7 +102,7 @@ Widget grocery_list(
                             }
                             else
                               return Text("0");
-                          }),
+                          }),*/
                       const VerticalDivider(
                         width: 10,
                       ),

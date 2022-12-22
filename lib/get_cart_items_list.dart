@@ -39,10 +39,19 @@ Widget get_cart_items_list(
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(child: Icon(FontAwesomeIcons.minus),onTap: () async {
-                    FirebaseFirestore.instance.collection(
-                        "Cart").doc(snapshot.data?.docs[index].reference.id).update(
-                        {"quantity": snapshot.data!.docs[index]['quantity']-1});
-
+                    if(snapshot.data!.docs[index]['quantity']>1) {
+                      FirebaseFirestore.instance.collection(
+                          "Cart")
+                          .doc(snapshot.data?.docs[index].reference.id)
+                          .update(
+                          {"quantity": snapshot.data!.docs[index]['quantity'] -
+                              1}
+                      );
+                    }else{
+                      FirebaseFirestore.instance.collection(
+                          "Cart")
+                          .doc(snapshot.data?.docs[index].reference.id).delete();
+                    }
                   }),
                 ),
                 Text(snapshot.data!.docs[index]['quantity'].toString(),style: TextStyle(fontSize: 15)),

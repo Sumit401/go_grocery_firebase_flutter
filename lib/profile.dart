@@ -66,7 +66,7 @@ class _profileState extends State<profile> {
               child: FadeInImage.assetNetwork(
                 fadeInDuration: Duration(seconds: 1),
                 placeholderFit: BoxFit.fill,
-                placeholder: ('assets/images/user_img.jpg'),
+                placeholder: 'assets/images/user_img.png',
                 fit: BoxFit.fill,
                 image: user_image,
                 height: 100,

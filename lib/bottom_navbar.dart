@@ -33,14 +33,14 @@ class _bottom_navbarState extends State<bottom_navbar> {
   }
   void on_item_tapped(int index){
     setState(() {
-      if(index==0){
+      if(index==0&& current_index_bottom_navbar!=0){
         Navigator.pop(context);
         Navigator.pushNamed(context, homepage.route);
-      }else if(index==1){
+      }else if(index==1 && current_index_bottom_navbar!=1){
         Navigator.pop(context);
         Navigator.pushNamed(context, cart_item.route);
 
-      }else if(index==2){
+      }else if(index==2 && current_index_bottom_navbar!=2){
         Navigator.pop(context);
         Navigator.pushNamed(context, profile.route);
       }
