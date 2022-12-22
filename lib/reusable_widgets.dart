@@ -158,23 +158,26 @@ google_sign_out() async{
 
 
 
-int cart_value = 0;
 Future<int> cart() async{
+  int cart_value=0;
+  int cart_price=0;
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   var email = sharedPreferences.getString("email").toString();
   FirebaseFirestore.instance.collection("Cart").get().then((value) {
     value.docs.forEach((element) {
       FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
         if(value2.data()!['email']==email){
-          cart_value = (value2.data()!['quantity']),
-          print(cart_value)
+          cart_value = cart_value + (value2.data()!['quantity']) as int,
+          cart_price = cart_price + ((value2.data()!['price']) as int) * ((value2.data()!['quantity']) as int),
+          sharedPreferences.setInt("cart_price", cart_price),
+          sharedPreferences.setInt("value", cart_value),
+          print(sharedPreferences.getInt("value")),
+          print(sharedPreferences.getInt("cart_price"))
         }
       });
     });
   });
-    //print("Return $cart_value");
-    //print(cart_value);
-    return cart_value;
+    return(cart_value);
   }
 
   /*FirebaseFirestore.instance.collection("Cart").get().then((value) {

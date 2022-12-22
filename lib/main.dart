@@ -1,3 +1,4 @@
+import 'package:cabs/checkout.dart';
 import 'package:cabs/homepage.dart';
 import 'package:cabs/login.dart';
 import 'package:cabs/profile.dart';
@@ -50,7 +51,8 @@ class _MyAppState extends State<MyApp> {
         login.route:(_)=> login(),
         homepage.route:(_)=>homepage(),
         profile.route:(_)=>profile(),
-        cart_item.route:(_)=>cart_item()
+        cart_item.route:(_)=>cart_item(),
+        checkout.route:(_)=>checkout(),
       },
       home: email=="null" ? login() : homepage());
 

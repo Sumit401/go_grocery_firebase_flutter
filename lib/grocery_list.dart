@@ -52,7 +52,7 @@ Widget grocery_list(
                             const Text("Price: ",
                                 style: TextStyle(fontWeight: FontWeight.w700)),
                             const Text("\u{20B9}"),
-                            Text((snapshot.data!.docs[index]['price'])),
+                            Text((snapshot.data!.docs[index]['price'].toString())),
                             const Text(" / "),
                             Text((snapshot.data!.docs[index]['si'])),
                           ],
@@ -63,10 +63,9 @@ Widget grocery_list(
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      InkWell(
+                      /*InkWell(
                           child: Icon(FontAwesomeIcons.minus),
                           onTap: () async {
-
                             String? grocery_id = snapshot.data?.docs[index].reference.id;
                             SharedPreferences sharedPreferences =
                             await SharedPreferences.getInstance();
@@ -87,11 +86,10 @@ Widget grocery_list(
                                 );
                               });
                             });
-                          }),
+                            cart();
+                          }),*/
 
-                      const VerticalDivider(
-                        width: 10,
-                      ),
+
                       // For Cart Count
                       /*FutureBuilder(
                           future: cart(snapshot.data?.docs[index].reference.id),
@@ -103,9 +101,6 @@ Widget grocery_list(
                             else
                               return Text("0");
                           }),*/
-                      const VerticalDivider(
-                        width: 10,
-                      ),
                       InkWell(
                         child: Icon(FontAwesomeIcons.plus),
                         onTap: () async {
@@ -146,6 +141,9 @@ Widget grocery_list(
                               });
                           });
                         },
+                      ),
+                      const VerticalDivider(
+                        width: 10,
                       ),
                     ],
                   ),

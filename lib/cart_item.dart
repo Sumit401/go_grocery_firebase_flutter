@@ -1,4 +1,6 @@
+
 import 'package:cabs/bottom_navbar.dart';
+import 'package:cabs/checkout.dart';
 import 'package:cabs/get_cart_items_list.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +17,8 @@ class cart_item extends StatefulWidget {
 
 var fire_storedb = FirebaseFirestore.instance.collection("Cart").snapshots();
 var user_email = "";
+int cart_value=0;
+var data_value ="0";
 
 class _cart_itemState extends State<cart_item> {
   @override
@@ -46,13 +50,35 @@ class _cart_itemState extends State<cart_item> {
             height: MediaQuery.of(context).size.height / 1.3,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                    onPressed: () {
-
-                    }, child: Text("Proceed to Checkout")),
+                    onPressed: () async {
+                      int cart_value2 = 0;
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      var email = sharedPreferences.getString("email").toString();
+                      FirebaseFirestore.instance
+                          .collection("Cart").get().then((value) {
+                        value.docs.forEach((element) {
+                          FirebaseFirestore.instance
+                              .collection("Cart").doc(element.id).get()
+                              .then((value2) => {
+                                    if (value2.data()!['email'] == email)
+                                      {
+                                        cart_value2 = cart_value2 +
+                                            (value2.data()!['quantity']) as int,
+                                        sharedPreferences.setInt(
+                                            "value", cart_value2),
+                                        print(sharedPreferences.getInt("value"))
+                                      }
+                                  });
+                        });
+                      });
+                      Navigator.pushNamed(context, checkout.route);
+                    },
+                    child: Text("Proceed to Checkout")),
               ))
         ],
       ),
@@ -60,13 +86,6 @@ class _cart_itemState extends State<cart_item> {
     );
   }
 
-  void getsharedpreferences() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var email = sharedPreferences.getString("email").toString();
-    setState(() {
-      user_email = email;
-    });
-  }
 
   Widget listview() {
     return Container(
@@ -94,15 +113,14 @@ class _cart_itemState extends State<cart_item> {
       ),
     );
   }
+  void getsharedpreferences() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var email = sharedPreferences.getString("email").toString();
+    //var value = sharedPreferences.getInt("value").toString();
+    setState(() {
+      /*print(value);
+      data_value=value;*/
+      user_email = email;
+    });
+  }
 }
-/*
-if (Text(snapshot.data!.docs[index]['email'])==){
-Row(children: [
-Text(snapshot.data!.docs[index]['name']),
-Text(snapshot.data!.docs[index]['price']),
-Text(snapshot.data!.docs[index]['si']),
-Text(snapshot.data!.docs[index]['email']),
-],)
-}else{
-
-}*/

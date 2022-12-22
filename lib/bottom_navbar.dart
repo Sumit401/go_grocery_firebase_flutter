@@ -1,6 +1,7 @@
 import 'package:cabs/cart_item.dart';
 import 'package:cabs/homepage.dart';
 import 'package:cabs/profile.dart';
+import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -37,6 +38,7 @@ class _bottom_navbarState extends State<bottom_navbar> {
         Navigator.pop(context);
         Navigator.pushNamed(context, homepage.route);
       }else if(index==1 && current_index_bottom_navbar!=1){
+        cart();
         Navigator.pop(context);
         Navigator.pushNamed(context, cart_item.route);
 

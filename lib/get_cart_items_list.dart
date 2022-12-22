@@ -1,3 +1,4 @@
+import 'package:cabs/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,7 +24,7 @@ Widget get_cart_items_list(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Rs "),
-                    Text(snapshot.data!.docs[index]['price']),
+                    Text(snapshot.data!.docs[index]['price'].toString()),
                     Text(" / "),
                     Text(snapshot.data!.docs[index]['si']),
                   ],
@@ -52,6 +53,7 @@ Widget get_cart_items_list(
                           "Cart")
                           .doc(snapshot.data?.docs[index].reference.id).delete();
                     }
+                    cart();
                   }),
                 ),
                 Text(snapshot.data!.docs[index]['quantity'].toString(),style: TextStyle(fontSize: 15)),
@@ -61,7 +63,7 @@ Widget get_cart_items_list(
                     FirebaseFirestore.instance.collection(
                         "Cart").doc(snapshot.data?.docs[index].reference.id).update(
                         {"quantity": snapshot.data!.docs[index]['quantity']+1});
-
+                    cart();
                   },),
                 ),
               ],
