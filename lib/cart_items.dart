@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 Widget get_cart_items_list(
     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot, int index) {
   return Padding(
@@ -39,22 +38,19 @@ Widget get_cart_items_list(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: InkWell(child: Icon(FontAwesomeIcons.minus),onTap: () async {
                     if(snapshot.data!.docs[index]['quantity']>1) {
-                      FirebaseFirestore.instance.collection(
-                          "Cart")
+                      FirebaseFirestore.instance.collection("Cart")
                           .doc(snapshot.data?.docs[index].reference.id)
-                          .update(
-                          {"quantity": snapshot.data!.docs[index]['quantity'] -
-                              1}
+                          .update({"quantity": snapshot.data!.docs[index]['quantity'] - 1}
                       );
                     }else{
                       FirebaseFirestore.instance.collection(
                           "Cart")
                           .doc(snapshot.data?.docs[index].reference.id).delete();
                     }
-                    cart();
+                    getcart_item_pricecount();
                   }),
                 ),
                 Text(snapshot.data!.docs[index]['quantity'].toString(),style: TextStyle(fontSize: 15)),
@@ -64,7 +60,7 @@ Widget get_cart_items_list(
                     FirebaseFirestore.instance.collection(
                         "Cart").doc(snapshot.data?.docs[index].reference.id).update(
                         {"quantity": snapshot.data!.docs[index]['quantity']+1});
-                    cart();
+                    getcart_item_pricecount();
                   },),
                 ),
               ],

@@ -1,5 +1,8 @@
 
-import 'package:cabs/homepage.dart';
+import 'package:cabs/cart_navigation.dart';
+import 'package:cabs/checkout.dart';
+import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +80,33 @@ Widget formfield_for_name(String text,TextEditingController editingController) {
           validator: RequiredValidator(errorText: "Required"))));
 }
 
+Widget button_for_registration(BuildContext context, String user_email, String user_password, String user_name){
+  return ElevatedButton(
+      onPressed: () {
+        FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: user_email,
+            password:user_password)
+            .then((value) async{
+          print("Registration Successful");
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          sharedPreferences.setString("email", user_email);
+          sharedPreferences.setString("name", user_name);
+          short_flutter_toast("Registration Successful");
+          Navigator.pop(context);
+          Navigator.pushNamed(context, login.route);
+        }).onError((error, stackTrace) {
+          FocusManager.instance.primaryFocus?.unfocus();
+          long_flutter_toast("User Already Registered! Please Login");
+          print(error.toString());
+        });
+      },
+      child: Text("Register Now"),
+      style: ButtonStyle(
+          backgroundColor:
+          MaterialStatePropertyAll(Colors.lightGreen)));
+}
+
 Widget google_sign_in_buttons(BuildContext context) {
   return (
       ElevatedButton(
@@ -95,7 +125,7 @@ Widget google_sign_in_buttons(BuildContext context) {
               sharedPreferences.setString("name", (FirebaseAuth.instance.currentUser?.displayName).toString());
               sharedPreferences.setString("user_image", (FirebaseAuth.instance.currentUser?.photoURL).toString());
               Navigator.pop(context);
-              Navigator.pushNamed(context, homepage.route);
+              Navigator.pushNamed(context, grocery_items_listview.route);
             }
           }on FirebaseAuthException catch(e){
             print(e.toString());
@@ -160,7 +190,7 @@ google_sign_out() async{
 
 
 
-Future<int> cart() async{
+Future<int> getcart_item_pricecount() async{
   int cart_value=0;
   int cart_price=0;
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -217,13 +247,32 @@ Future<Placemark> getaddress (Position position) async {
   return placemark[0];
 }
 
-  /*FirebaseFirestore.instance.collection("Cart").get().then((value) {
-    value.docs.forEach((element) { 
-      FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
-        if(value2.data()!['grocery_id']==docid)
-        s=(value2.data()!['quantity'])
-      });
-    });
-  });
-  )*/
-
+Widget button_for_checkout(BuildContext context){
+  return ElevatedButton(
+      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+      onPressed: () async {
+        int cart_value2 = 0;
+        SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+        var email = sharedPreferences.getString("email").toString();
+        FirebaseFirestore.instance
+            .collection("Cart").get().then((value) {
+          value.docs.forEach((element) {
+            FirebaseFirestore.instance
+                .collection("Cart").doc(element.id).get()
+                .then((value2) => {
+              if (value2.data()!['email'] == email)
+                {
+                  cart_value2 = cart_value2 +
+                      (value2.data()!['quantity']) as int,
+                  sharedPreferences.setInt(
+                      "value", cart_value2),
+                  print(sharedPreferences.getInt("value"))
+                }
+            });
+          });
+        });
+        Navigator.pushNamed(context, checkout.route);
+      },
+      child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
+}

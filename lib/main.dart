@@ -1,10 +1,11 @@
 import 'package:cabs/checkout.dart';
-import 'package:cabs/homepage.dart';
-import 'package:cabs/login.dart';
-import 'package:cabs/profile.dart';
+import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/login_page.dart';
+import 'package:cabs/profile_navigation.dart';
 import 'package:cabs/register.dart';
-import 'package:cabs/cart_item.dart';
+import 'package:cabs/cart_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,6 @@ class MyApp extends StatefulWidget {
 
 var email="";
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +49,18 @@ class _MyAppState extends State<MyApp> {
       routes: {
         register.route: (_) => register(),
         login.route:(_)=> login(),
-        homepage.route:(_)=>homepage(),
+        grocery_items_listview.route:(_)=>grocery_items_listview(),
         profile.route:(_)=>profile(),
         cart_item.route:(_)=>cart_item(),
         checkout.route:(_)=>checkout(),
       },
-      home: email=="null" ? login() : homepage());
-
+        home: AnimatedSplashScreen(
+          nextScreen: email == "null" ? login() : grocery_items_listview(),
+          splashIconSize: 150,
+          splash: Image.asset("assets/images/app_logo.png"),
+          backgroundColor: Colors.amberAccent,
+          splashTransition: SplashTransition.fadeTransition,
+        ));
   }
 
 

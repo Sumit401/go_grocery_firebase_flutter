@@ -1,4 +1,4 @@
-import 'package:cabs/cart_item.dart';
+import 'package:cabs/cart_navigation.dart';
 import 'package:cabs/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

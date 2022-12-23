@@ -3,7 +3,7 @@ import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login.dart';
+import 'login_page.dart';
 
 class profile extends StatefulWidget {
   const profile({Key? key}) : super(key: key);
@@ -61,20 +61,47 @@ class _profileState extends State<profile> {
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25), color: Colors.blue),
-            child: ClipOval(
-              child: FadeInImage.assetNetwork(
-                fadeInDuration: Duration(seconds: 5),
-                placeholder: "assets/images/user_img.png",
-                image: user_image,
-                height: 100,
-                width: 100,
-              ),
+                borderRadius: BorderRadius.circular(25)),
+            child: FadeInImage.assetNetwork(
+              placeholderErrorBuilder: (context, error, stackTrace) {
+                return(Image.asset('assets/images/user_img.png',height: 100,width: 100,));
+              },
+              placeholder: 'assets/images/user_img.png',
+              image: user_image.toString(),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return(Image.asset('assets/images/user_img.png',height: 100,width: 100,));
+              },
+              height: 100,
+              width: 100,
             ),
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
               child: Text(user_email)),
+          Column(children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(10),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.lightBlueAccent),),
+                  child: Text("My Account",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,),),
+                  onPressed: () {},),),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(10),
+                  backgroundColor:
+                  MaterialStateProperty.all(Colors.lightBlueAccent),),
+                child: Text("My Orders",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,),),
+                onPressed: () {},),),
+
+          ],)
+
         ]),
       ),
     );

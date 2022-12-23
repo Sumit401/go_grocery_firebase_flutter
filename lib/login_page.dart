@@ -1,4 +1,4 @@
-import 'package:cabs/homepage.dart';
+import 'package:cabs/grocery_items_listview.dart';
 import 'package:cabs/register.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +35,7 @@ class _loginState extends State<login> {
             gradient: LinearGradient(
                 begin: Alignment.bottomRight,
                 end: Alignment.topLeft,
-                stops: [
-              0.05,
-              0.2,
-              0.6,
-              1
-            ],
+                stops: [0.05, 0.2, 0.6, 1],
                 colors: [
               Colors.deepOrange,
               Colors.orange,
@@ -80,7 +75,7 @@ class _loginState extends State<login> {
 
                           short_flutter_toast("Login Successful");
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, homepage.route);
+                          Navigator.pushNamed(context, grocery_items_listview.route);
                         },
                       ).onError(
                         (error, stackTrace) {

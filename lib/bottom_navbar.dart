@@ -1,6 +1,6 @@
-import 'package:cabs/cart_item.dart';
-import 'package:cabs/homepage.dart';
-import 'package:cabs/profile.dart';
+import 'package:cabs/cart_navigation.dart';
+import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/profile_navigation.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +19,10 @@ class _bottom_navbarState extends State<bottom_navbar> {
   @override
   Widget build(BuildContext context) {
     return (BottomNavigationBar(
+      elevation: 20,
+      backgroundColor: Colors.blueAccent,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.black,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.house), label: "Home"),
@@ -36,9 +40,9 @@ class _bottom_navbarState extends State<bottom_navbar> {
     setState(() {
       if(index==0&& current_index_bottom_navbar!=0){
         Navigator.pop(context);
-        Navigator.pushNamed(context, homepage.route);
+        Navigator.pushNamed(context, grocery_items_listview.route);
       }else if(index==1 && current_index_bottom_navbar!=1){
-        cart();
+        getcart_item_pricecount();
         Navigator.pop(context);
         Navigator.pushNamed(context, cart_item.route);
 

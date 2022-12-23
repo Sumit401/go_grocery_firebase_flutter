@@ -1,4 +1,4 @@
-import 'package:cabs/login.dart';
+import 'package:cabs/login_page.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,15 +15,11 @@ class register extends StatefulWidget {
 }
 
 class _registerState extends State<register> {
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   GlobalKey<FormState> formvalidationkey = GlobalKey<FormState>();
-
   TextEditingController texteditingcontroller_email = TextEditingController();
-
-  TextEditingController texteditingcontroller_password =
-      TextEditingController();
-
+  TextEditingController texteditingcontroller_password = TextEditingController();
   TextEditingController texteditingcontroller_name = TextEditingController();
 
   @override
@@ -73,30 +69,7 @@ class _registerState extends State<register> {
                       "Password", texteditingcontroller_password),
                   Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: texteditingcontroller_email.text,
-                                  password: texteditingcontroller_password.text)
-                              .then((value) async{
-                            print("Registration Successful");
-                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                            sharedPreferences.setString("email", texteditingcontroller_email.text);
-                            sharedPreferences.setString("name", texteditingcontroller_name.text);
-                            short_flutter_toast("Registration Successful");
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, login.route);
-                          }).onError((error, stackTrace) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            long_flutter_toast("User Already Registered! Please Login");
-                            print(error.toString());
-                          });
-                        },
-                        child: Text("Register Now"),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.lightGreen))),
+                    child: button_for_registration(context,texteditingcontroller_email.text,texteditingcontroller_name.text,texteditingcontroller_name.text),
                   ),
                   InkWell(
                     onTap: () {
