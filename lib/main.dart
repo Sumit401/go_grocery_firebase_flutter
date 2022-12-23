@@ -1,5 +1,6 @@
 import 'package:cabs/checkout.dart';
 import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/homepage.dart';
 import 'package:cabs/login_page.dart';
 import 'package:cabs/profile_navigation.dart';
 import 'package:cabs/register.dart';
@@ -49,13 +50,14 @@ class _MyAppState extends State<MyApp> {
       routes: {
         register.route: (_) => register(),
         login.route:(_)=> login(),
+        homepage.route:(_)=>homepage(),
         grocery_items_listview.route:(_)=>grocery_items_listview(),
         profile.route:(_)=>profile(),
         cart_item.route:(_)=>cart_item(),
         checkout.route:(_)=>checkout(),
       },
         home: AnimatedSplashScreen(
-          nextScreen: email == "null" ? login() : grocery_items_listview(),
+          nextScreen: email == "null" ? login() : homepage(),
           splashIconSize: 150,
           splash: Image.asset("assets/images/app_logo.png"),
           backgroundColor: Colors.amberAccent,

@@ -1,4 +1,3 @@
-import 'package:cabs/bottom_navbar.dart';
 import 'package:cabs/grocery_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class grocery_items_listview extends StatefulWidget {
   const grocery_items_listview({Key? key}) : super(key: key);
-  static const route = "/homepage";
+  static const route = "/grocery_items_listview";
 
   @override
   State<grocery_items_listview> createState() => _grocery_items_listviewState();
@@ -23,7 +22,6 @@ class _grocery_items_listviewState extends State<grocery_items_listview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const bottom_navbar(),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(5.0),

@@ -1,5 +1,5 @@
 import 'package:cabs/cart_navigation.dart';
-import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/homepage.dart';
 import 'package:cabs/profile_navigation.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class _bottom_navbarState extends State<bottom_navbar> {
     setState(() {
       if(index==0&& current_index_bottom_navbar!=0){
         Navigator.pop(context);
-        Navigator.pushNamed(context, grocery_items_listview.route);
+        Navigator.pushNamed(context, homepage.route);
       }else if(index==1 && current_index_bottom_navbar!=1){
         getcart_item_pricecount();
         Navigator.pop(context);
