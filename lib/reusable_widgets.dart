@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geocoding/geocoding.dart';
 
 
 final firebase_auth=FirebaseAuth.instance;
@@ -171,14 +173,49 @@ Future<int> cart() async{
           cart_price = cart_price + ((value2.data()!['price']) as int) * ((value2.data()!['quantity']) as int),
           sharedPreferences.setInt("cart_price", cart_price),
           sharedPreferences.setInt("value", cart_value),
-          print(sharedPreferences.getInt("value")),
-          print(sharedPreferences.getInt("cart_price"))
+          //print(sharedPreferences.getInt("value")),
+          //print(sharedPreferences.getInt("cart_price"))
         }
       });
     });
   });
     return(cart_value);
   }
+
+
+
+// For Geo Location API
+Future<Position> determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    await Geolocator.openLocationSettings();
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+  return await Geolocator.getCurrentPosition();
+}
+
+Future<Placemark> getaddress (Position position) async {
+  List placemark = await placemarkFromCoordinates(position.latitude, position.longitude);
+  //print(placemark[0]);
+  print(placemark[0]);
+  return placemark[0];
+}
 
   /*FirebaseFirestore.instance.collection("Cart").get().then((value) {
     value.docs.forEach((element) { 

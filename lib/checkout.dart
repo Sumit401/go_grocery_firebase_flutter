@@ -1,6 +1,11 @@
+import 'package:cabs/cart_item.dart';
+import 'package:cabs/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cabs/reusable_widgets.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class checkout extends StatefulWidget {
   const checkout({Key? key}) : super(key: key);
@@ -11,19 +16,26 @@ class checkout extends StatefulWidget {
   State<checkout> createState() => _checkoutState();
 }
 
-String cart_value = "";
-String cart_price = "";
-String user_email = "";
-String user_name = "";
-int shipping_charges = 0;
-int total_payable_amount = 0;
+
 
 class _checkoutState extends State<checkout> {
+
   @override
   void initState() {
-    getsharedpreference();
     super.initState();
+    getsharedpreference();
   }
+  TextEditingController user_email=  TextEditingController();
+  TextEditingController user_name =  TextEditingController();
+  TextEditingController user_address = TextEditingController();
+  TextEditingController user_state = TextEditingController();
+  TextEditingController user_contactnum = TextEditingController();
+  TextEditingController user_zipcode = TextEditingController();
+  
+  String cart_value = "";
+  String cart_price = "";
+  int shipping_charges = 0;
+  int total_payable_amount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,9 @@ class _checkoutState extends State<checkout> {
       //bottomNavigationBar: bottom_navbar(),
       appBar: AppBar(
           leading:
-              Icon(FontAwesomeIcons.angleLeft, color: Colors.black, size: 30),
+              InkWell(onTap: () {
+                Navigator.pop(context);
+              },child: Icon(FontAwesomeIcons.angleLeft, color: Colors.black, size: 30)),
           title: Text("Price Details",
               style: TextStyle(color: Colors.blue, fontSize: 25)),
           elevation: 10,
@@ -123,8 +137,8 @@ class _checkoutState extends State<checkout> {
                 ),
                 const Divider(height: 2, color: Colors.black),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  margin: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -134,22 +148,47 @@ class _checkoutState extends State<checkout> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          initialValue: user_name,
+                          controller: user_name,
                           decoration: InputDecoration(labelText: "Name"),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          initialValue: user_email,
+                          controller: user_email,
+                          enabled: false,
+                          readOnly: true,
                           decoration: InputDecoration(labelText: "Email"),
                         ),
                       ),
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: TextField(
+                        child: TextFormField(
                           minLines: 3,
-                          decoration: InputDecoration(labelText: "Address"),
+                          controller: user_address,
+                          decoration: InputDecoration(
+                              labelText: "Address",
+                              suffixIcon: InkWell(
+                                onTap: () async {
+                                  Position position = await determinePosition();
+                                  getaddress(position).then((value) {
+                                    if (this.mounted) {
+                                      setState(() {
+                                        String? address="${value.street},${value.thoroughfare},${value.subLocality},${value.locality}";
+                                        user_address.text=address;
+                                        String? state =value.administrativeArea;
+                                        user_state.text=state!;
+                                        String? pin =value.postalCode;
+                                        user_zipcode.text=pin!;
+                                      });
+                                    }
+                                  },);
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.locationCrosshairs,
+                                  color: Colors.black,
+                                ),
+                              )),
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                         ),
@@ -161,15 +200,17 @@ class _checkoutState extends State<checkout> {
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: user_state,
                               decoration:
-                                  InputDecoration(labelText: "District"),
+                                  InputDecoration(labelText: "State"),
                             ),
                           )),
                           Expanded(
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              decoration: InputDecoration(labelText: "State"),
+                              controller: user_zipcode,
+                              decoration: InputDecoration(labelText: "Pin"),
                             ),
                           )),
                         ],
@@ -177,6 +218,7 @@ class _checkoutState extends State<checkout> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: user_contactnum,
                           decoration: InputDecoration(labelText: "Contact No"),
                           autocorrect: true,
                         ),
@@ -186,7 +228,9 @@ class _checkoutState extends State<checkout> {
                         child: ElevatedButton(
                             style: ButtonStyle(
                                 elevation: MaterialStateProperty.all(10)),
-                            onPressed: () {},
+                            onPressed: () {
+                              razorpay(total_payable_amount,user_email.text,user_contactnum.text);
+                            },
                             child: const Text("Place Order")),
                       )
                     ],
@@ -204,19 +248,22 @@ class _checkoutState extends State<checkout> {
     var email = sharedPreferences.getString("email").toString();
     var value = sharedPreferences.getInt("value").toString();
     int? price = sharedPreferences.getInt("cart_price");
-    setState(() {
-      cart_price = price.toString();
-      user_name = name;
-      cart_value = value;
-      user_email = email;
-      if (price! < 500) {
-        shipping_charges = 40;
-      } else if (price > 500 && price < 800) {
-        shipping_charges = 20;
-      } else {
-        shipping_charges = 0;
+
+      if (this.mounted) {
+        setState(() {
+          cart_price = price.toString();
+          user_name.text = name;
+          cart_value = value;
+          user_email.text = email;
+          if (price! < 500) {
+            shipping_charges = 0;
+          } else if (price > 500 && price < 800) {
+            shipping_charges = 0;
+          } else {
+            shipping_charges = 0;
+          }
+          total_payable_amount = (price + shipping_charges);
+        });
       }
-      total_payable_amount = (price + shipping_charges);
-    });
   }
 }

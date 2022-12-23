@@ -64,10 +64,8 @@ class _profileState extends State<profile> {
                 borderRadius: BorderRadius.circular(25), color: Colors.blue),
             child: ClipOval(
               child: FadeInImage.assetNetwork(
-                fadeInDuration: Duration(seconds: 1),
-                placeholderFit: BoxFit.fill,
-                placeholder: 'assets/images/user_img.png',
-                fit: BoxFit.fill,
+                fadeInDuration: Duration(seconds: 5),
+                placeholder: "assets/images/user_img.png",
                 image: user_image,
                 height: 100,
                 width: 100,
