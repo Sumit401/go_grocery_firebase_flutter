@@ -52,56 +52,126 @@ class _profileState extends State<profile> {
             height: 70,
           ),
         ),
-        title: Text("Hi, $user_name", style: TextStyle(color: Colors.blue)),
+        title: Text("My Profile", style: TextStyle(color: Colors.blue)),
       ),
       bottomNavigationBar: bottom_navbar(),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.topCenter,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(
+            width: 100,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25)),
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(50),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/user_img.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
             child: FadeInImage.assetNetwork(
-              placeholderErrorBuilder: (context, error, stackTrace) {
-                return(Image.asset('assets/images/user_img.png',height: 100,width: 100,));
-              },
+              fit: BoxFit.fitWidth,
               placeholder: 'assets/images/user_img.png',
               image: user_image.toString(),
               imageErrorBuilder: (context, error, stackTrace) {
-                return(Image.asset('assets/images/user_img.png',height: 100,width: 100,));
+                return (Image.asset(
+                  'assets/images/user_img.png',
+                  height: 100,
+                  width: 100,
+                ));
               },
               height: 100,
               width: 100,
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10),
-              child: Text(user_email)),
-          Column(children: [
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ButtonStyle(
+              margin: EdgeInsets.only(top: 10),
+              child: Text(user_name,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
+          Container(margin: EdgeInsets.only(top: 10), child: Text(user_email)),
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
                       elevation: MaterialStateProperty.all(10),
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.lightBlueAccent),),
-                  child: Text("My Account",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,),),
-                  onPressed: () {},),),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              width: MediaQuery.of(context).size.width,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(10),
-                  backgroundColor:
-                  MaterialStateProperty.all(Colors.lightBlueAccent),),
-                child: Text("My Orders",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,),),
-                onPressed: () {},),),
-
-          ],)
-
+                          MaterialStateProperty.all(Colors.lightBlueAccent),
+                    ),
+                    child: const Text(
+                      "My Account",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(10),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.lightBlueAccent),
+                    ),
+                    child: const Text(
+                      "My Orders",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(10),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.lightBlueAccent),
+                        ),
+                        child: const Text(
+                          "About Us",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        onPressed: () {
+                          dialogbox_aboutus(context);
+                        })),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(10),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.lightBlueAccent),
+                    ),
+                    child: const Text(
+                      "Contact Us",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          )
         ]),
       ),
     );

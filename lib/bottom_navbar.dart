@@ -21,9 +21,10 @@ class _bottom_navbarState extends State<bottom_navbar> {
     return (BottomNavigationBar(
       elevation: 20,
       backgroundColor: Colors.blueAccent,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.black,
-      items: const <BottomNavigationBarItem>[
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.white,
+      items:const [
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.house), label: "Home"),
         BottomNavigationBarItem(
@@ -38,9 +39,10 @@ class _bottom_navbarState extends State<bottom_navbar> {
   }
   void on_item_tapped(int index){
     setState(() {
-      if(index==0&& current_index_bottom_navbar!=0){
+      if(index==0 && current_index_bottom_navbar!=0){
         Navigator.pop(context);
         Navigator.pushNamed(context, homepage.route);
+
       }else if(index==1 && current_index_bottom_navbar!=1){
         getcart_item_pricecount();
         Navigator.pop(context);

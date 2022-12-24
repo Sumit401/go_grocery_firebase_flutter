@@ -1,7 +1,6 @@
-
-import 'package:cabs/cart_navigation.dart';
 import 'package:cabs/checkout.dart';
 import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/homepage.dart';
 import 'package:cabs/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -125,7 +124,7 @@ Widget google_sign_in_buttons(BuildContext context) {
               sharedPreferences.setString("name", (FirebaseAuth.instance.currentUser?.displayName).toString());
               sharedPreferences.setString("user_image", (FirebaseAuth.instance.currentUser?.photoURL).toString());
               Navigator.pop(context);
-              Navigator.pushNamed(context, grocery_items_listview.route);
+              Navigator.pushNamed(context, homepage.route);
             }
           }on FirebaseAuthException catch(e){
             print(e.toString());
@@ -267,7 +266,7 @@ Widget button_for_checkout(BuildContext context){
                       (value2.data()!['quantity']) as int,
                   sharedPreferences.setInt(
                       "value", cart_value2),
-                  print(sharedPreferences.getInt("value"))
+                  //print(sharedPreferences.getInt("value"))
                 }
             });
           });
@@ -275,4 +274,81 @@ Widget button_for_checkout(BuildContext context){
         Navigator.pushNamed(context, checkout.route);
       },
       child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
+}
+
+Future dialogbox_aboutus(BuildContext context){
+  return (showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(20))),
+          title: const Text("About Us",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+          content: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Spare more with 'Go Grocery!' We give you the most minimal costs on the entirety of your grocery needs.‘Go Grocery’ is a low-cost online general store that gets items crosswise over classifications like grocery, natural products and vegetables, excellence and health, family unit care, infant care, pet consideration, and meats and fish conveyed to your doorstep.Browse more than 5,000 items at costs lower than markets each day!Calendar conveyance according to your benefit.",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+          elevation: 20,
+          icon: Image.asset(
+            "assets/images/app_logo.png",
+            height: 100,
+            width: 100,
+          ),
+          iconPadding:
+          EdgeInsets.symmetric(vertical: 20),
+        );
+      }));
+}
+
+
+Widget homepage_category(BuildContext context, String category_type){
+  return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return grocery_items_listview();
+        }));
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+
+            Container(
+                child: category_type == "Fresh Fruits" ? Image.network(
+                  "https://www.seekpng.com/png/detail/434-4347412_tropical-png-illustration-tropical-fruits-png.png",
+                  height: 100, width: 100,)
+                    : category_type == "Fresh Vegetables" ? Image.network(
+                  "https://www.healthyeating.org/images/default-source/home-0.0/nutrition-topics-2.0/general-nutrition-wellness/2-2-2-2foodgroups_vegetables_detailfeature.jpg",
+                  height: 100, width: 100,)
+                    : category_type == "Dairy Products" ? Image.network(
+                  "https://domf5oio6qrcr.cloudfront.net/medialibrary/9685/iStock-544807136.jpg",
+                  height: 100, width: 100,)
+                    : category_type == "Food-grains" ? Image.network(
+                  "https://qph.cf2.quoracdn.net/main-qimg-4921d9634104fb2d0bdfd154f93b5d7f.webp",
+                  height: 100, width: 100,)
+                    : category_type == "Cleaning and Household" ? Image.network(
+                  "https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/743/cached.offlinehbpl.hbpl.co.uk/news/OMC/988EAC9D-00F5-EEE9-6A89B0F36DBAF81C.jpg",
+                  height: 100, width: 100,)
+                    : category_type == "Beverages" ?Image.network(
+                  "https://agronfoodprocessing.com/wp-content/uploads/2021/03/beve.jpg",
+                  height: 100, width: 100,) : Image.asset("assets/images/user_img.png",width: 100,height: 100,)
+            ),
+          Container(
+              width: 120,
+              child: Text(category_type,
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              )),
+        ],
+      ));
+  
+  
+  
 }

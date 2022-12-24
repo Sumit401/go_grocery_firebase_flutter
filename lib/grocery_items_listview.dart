@@ -15,13 +15,12 @@ class _grocery_items_listviewState extends State<grocery_items_listview> {
   String value = "vegetables";
   var items = ["vegetables", "fruits", "Dairy", "Cereals", "Household"];
   String? dropdownvalue = "vegetables";
-  var fire_storedb =
-      FirebaseFirestore.instance.collection("vegetables").snapshots();
-
+  var fire_storedb = FirebaseFirestore.instance.collection("vegetables").snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //bottomNavigationBar: bottom_navbar(),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(5.0),

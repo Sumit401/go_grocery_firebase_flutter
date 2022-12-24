@@ -1,7 +1,8 @@
 import 'package:cabs/bottom_navbar.dart';
-import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/reusable_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -10,45 +11,86 @@ class homepage extends StatefulWidget {
   @override
   State<homepage> createState() => _homepageState();
 }
+var fire_storedb = FirebaseFirestore.instance.collection("carousel").snapshots();
 
 class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Homepage"), centerTitle: true),
+      appBar: AppBar(title: Text("Go Grocery"), centerTitle: true,elevation: 20,leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.asset(
+          "assets/images/app_logo.png",
+          width: 70,
+          height: 70,
+        ),
+      ),),
       body: Container(
         child: Column(
           children: [
             SizedBox(
-              height: 300,
-              child: Carousel(
-                animationCurve: Curves.bounceIn,
-                animationDuration: Duration(seconds: 7),
-                autoplay: true,
-                boxFit: BoxFit.fitWidth,
-                dotSize: 4.0,
-                dotSpacing: 15.0,
-                dotColor: Colors.lightGreenAccent,
-                indicatorBgPadding: 5.0,
-                borderRadius: true,
-                images: [
-                    NetworkImage("https://media.istockphoto.com/id/1216828053/photo/shopping-basket-with-fresh-food-grocery-supermarket-food-and-eats-online-buying-and-delivery.jpg?s=612x612&w=0&k=20&c=Chd527v9-ho7a-S5k24kcWWfB92Pj3Vh2eM0erk74AU="),
-                    NetworkImage("https://www.shutterstock.com/image-photo/healthy-food-background-vegan-vegetarian-260nw-1610617150.jpg"),
-                    NetworkImage("https://media.istockphoto.com/id/1328991116/photo/fresh-vegetables-and-fruits-on-counter-in-grocery-supermarket.jpg?b=1&s=170667a&w=0&k=20&c=yPu0rw6pU8oD4c3YR91bzKQx2GxyZxBQFpzMwVwR_g4="),
-                    NetworkImage("https://img.freepik.com/free-vector/shopping-supermarket-cart-with-grocery-pictogram_1284-11697.jpg?size=338&ext=jpg"),
-                    NetworkImage("https://img.freepik.com/free-vector/interior-supermarket-store-with-people-character-cashier-buyer_80328-122.jpg?size=626&ext=jpg")
-                  ],
-              ),
-            ),
-            ElevatedButton(
-              child: Text("All Items"),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return grocery_items_listview();
+                height: 300,
+                child: StreamBuilder(
+                  stream: fire_storedb,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return Container();
+                    return CarouselSlider.builder(
+                        itemCount: snapshot.data?.size,
+                        itemBuilder: (context, index, realIndex) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.network(snapshot.data!.docs[index]['images']
+                                .toString()),
+                          );
+                        },
+                        options: CarouselOptions(
+                          height: 300,
+                          autoPlay: true,
+                          pauseAutoPlayOnTouch: true,
+                          enlargeCenterPage: true,
+                          enableInfiniteScroll: true,
+                          initialPage: 0,
+                          autoPlayInterval: Duration(seconds: 3),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                        ));
                   },
-                ));
-              },
+                )),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    alignment: Alignment.center,
+                    height: 40,
+                      color: Colors.red,
+                      child: Text(
+                        "Shop by Category",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      homepage_category(context,"Fresh Fruits"),
+                      homepage_category(context,"Fresh Vegetables"),
+                      homepage_category(context,"Dairy Products"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      homepage_category(context,"Food-grains"),
+                      homepage_category(context,"Cleaning and Household"),
+                      homepage_category(context,"Beverages"),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
