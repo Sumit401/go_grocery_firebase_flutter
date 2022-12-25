@@ -9,6 +9,7 @@ String userName = "";
 String userEmail = "";
 String userContactno = "";
 String userAddress = "";
+var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 void payment_razorpay(
     int totalPayableAmountLoc,
@@ -59,12 +60,13 @@ Future<void> handlePaymentSuccessResponse(
     "email": userEmail,
     "item_no": no_of_items,
     "address": userAddress,
+    "date" : "${MONTHS[DateTime.now().month-1]}  ${DateTime.now().day} , ${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}",
     "cart_price": totalPayableAmount,
     "payment_id": response.paymentId,
     "response_id": response.orderId,
     "signature": response.signature,
   };
-  firebase_auth.doc().set(orderData);
+  firebase_auth.doc().set(orderData); // Set order_data to firebase
 
 }
 

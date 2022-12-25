@@ -15,8 +15,6 @@ class price_detail_checkout extends StatefulWidget {
   State<price_detail_checkout> createState() => _price_detail_checkoutState();
 }
 
-
-
 class _price_detail_checkoutState extends State<price_detail_checkout> {
 
   @override
@@ -171,7 +169,7 @@ class _price_detail_checkoutState extends State<price_detail_checkout> {
                                   getaddress(position).then((value) {
                                     if (this.mounted) {
                                       setState(() {
-                                        String? address="${value.street},${value.thoroughfare},${value.subLocality},${value.locality}";
+                                        String? address="${value.street} , ${ value.thoroughfare} , ${ value.subLocality} , ${value.locality}";
                                         user_address.text=address;
                                         String? state =value.administrativeArea;
                                         user_state.text=state!;
@@ -181,7 +179,7 @@ class _price_detail_checkoutState extends State<price_detail_checkout> {
                                     }
                                   },);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   FontAwesomeIcons.locationCrosshairs,
                                   color: Colors.black,
                                 ),
@@ -232,7 +230,7 @@ class _price_detail_checkoutState extends State<price_detail_checkout> {
                                   user_name.text,
                                   user_email.text,
                                   user_contactnum.text,
-                                  ("${user_address.text},${user_state.text},${user_zipcode.text}").toString());
+                                  ("${user_address.text}, ${user_state.text}, ${user_zipcode.text}").toString());
                             },
                             child: const Text("Place Order")),
                       )

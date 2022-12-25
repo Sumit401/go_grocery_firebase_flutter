@@ -27,31 +27,27 @@ class _my_ordersState extends State<my_orders> {
       appBar: app_bar_with_back_button(context,"My Orders"),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-        child: Card(
-          elevation: 15,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: StreamBuilder(
-            stream: firebase_auth,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container(alignment: Alignment.center,
-                    child: const CircularProgressIndicator());
-              }
-              return Container(
-                padding: EdgeInsets.all(20),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.size,
-                    itemBuilder:(context, index) {
-                      if(snapshot.data!.docs[index]["email"]==user_email.toString())
-                        return(get_orders_list(snapshot,index));
-                      else
-                        return(Container());
-                    },),
-              );
-            },
-          ),
+        child: StreamBuilder(
+          stream: firebase_auth,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container(alignment: Alignment.center,
+                  child: const CircularProgressIndicator());
+            }
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.size,
+                  itemBuilder:(context, index) {
+                    if(snapshot.data!.docs[index]["email"]==user_email.toString())
+                      return(get_myorders_list(snapshot,index));
+                    else
+                      return(Container());
+                  },),
+            );
+          },
         ),
       ),
     );

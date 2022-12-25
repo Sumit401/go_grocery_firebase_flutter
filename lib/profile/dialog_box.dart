@@ -1,12 +1,14 @@
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 Future dialogbox_aboutus(BuildContext context){
   return (showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          scrollable: true,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(20))),
@@ -41,6 +43,11 @@ Future dialogbox_contactus(BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          scrollable: true,
+          alignment: Alignment.center,
+          elevation: 20,
+          iconPadding:
+          EdgeInsets.symmetric(vertical: 20),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(20))),
@@ -102,19 +109,45 @@ Future dialogbox_contactus(BuildContext context) {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                        Icon(FontAwesomeIcons.phone, color: Colors.lightBlueAccent),
-                        Icon(FontAwesomeIcons.whatsapp, color: Colors.green),
-                        Icon(FontAwesomeIcons.envelope, color: Colors.deepOrange),
+                      children: [
+                        InkWell(
+                            child: Icon(
+                              FontAwesomeIcons.phone,
+                              color: Colors.lightBlueAccent,
+                              size: 30,
+                            ),
+                            onTap: () async {
+                              String call_to = "tel:8210794699";
+                              await launchUrlString(call_to,
+                                  mode: LaunchMode.externalApplication);
+                            }),
+                        InkWell(
+                            child: Icon(FontAwesomeIcons.whatsapp,
+                                color: Colors.green, size: 30),
+                            onTap: () async {
+                              String whatsapp = "https://wa.me/918210794699";
+                              await launchUrlString(whatsapp,
+                                  mode: LaunchMode.externalApplication);
+                              //LaunchMode.externalApplication;
+                            }),
+                        InkWell(
+                            child: Icon(
+                              FontAwesomeIcons.envelope,
+                              color: Colors.deepOrange,
+                              size: 30,
+                            ),
+                            onTap: () async {
+                              String mail_url =
+                                  "mailto:sumitsinha401@gmail.com";
+                              await launchUrlString(mail_url,
+                                  mode: LaunchMode.externalApplication);
+                            }),
                       ],
                     )
                   ],
                 ),
               )
           ),
-          elevation: 20,
-          iconPadding:
-          EdgeInsets.symmetric(vertical: 20),
         );
       }));
 }
