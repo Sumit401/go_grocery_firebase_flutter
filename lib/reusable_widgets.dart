@@ -1,5 +1,4 @@
-import 'package:cabs/cart/checkout.dart';
-import 'package:cabs/profile/profile_navigation.dart';
+import 'package:cabs/payment_checkout/price_detail_checkout.dart';
 import 'package:cabs/grocery_list/grocery_items_listview.dart';
 import 'package:cabs/homepage/homepage.dart';
 import 'package:cabs/main_screens/login_page.dart';
@@ -238,7 +237,7 @@ Widget checkout_button(BuildContext context){
       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
       onPressed: () async {
         getcart_item_pricecount();
-        Navigator.pushNamed(context, checkout.route);
+        Navigator.pushNamed(context, price_detail_checkout.route);
       },
       child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
 }
@@ -338,3 +337,15 @@ Widget userimage_display(String userImage){
   );
 }
 
+AppBar app_bar_with_back_button(BuildContext context, String title){
+  return AppBar(
+      leading:
+      InkWell(onTap: () {
+        Navigator.pop(context);
+      },child: Icon(FontAwesomeIcons.angleLeft, color: Colors.white, size: 30)),
+      title: Text(title,
+          style: TextStyle(color: Colors.white, fontSize: 20)),
+      elevation: 10,
+      backgroundColor: Colors.blueAccent,
+      centerTitle: true);
+}

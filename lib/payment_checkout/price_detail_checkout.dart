@@ -1,5 +1,4 @@
-import 'package:cabs/cart/cart_navigation.dart';
-import 'package:cabs/cart/payment.dart';
+import 'package:cabs/payment_checkout/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,18 +6,18 @@ import 'package:cabs/reusable_widgets.dart';
 import 'package:geolocator/geolocator.dart';
 
 
-class checkout extends StatefulWidget {
-  const checkout({Key? key}) : super(key: key);
+class price_detail_checkout extends StatefulWidget {
+  const price_detail_checkout({Key? key}) : super(key: key);
 
   static const route = "/checkout";
 
   @override
-  State<checkout> createState() => _checkoutState();
+  State<price_detail_checkout> createState() => _price_detail_checkoutState();
 }
 
 
 
-class _checkoutState extends State<checkout> {
+class _price_detail_checkoutState extends State<price_detail_checkout> {
 
   @override
   void initState() {
@@ -40,17 +39,7 @@ class _checkoutState extends State<checkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //bottomNavigationBar: bottom_navbar(),
-      appBar: AppBar(
-          leading:
-              InkWell(onTap: () {
-                Navigator.pop(context);
-              },child: Icon(FontAwesomeIcons.angleLeft, color: Colors.white, size: 30)),
-          title: Text("Price Details",
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          elevation: 10,
-          backgroundColor: Colors.blueAccent,
-          centerTitle: true),
+      appBar: app_bar_with_back_button(context,"Price Details"),
       body: SingleChildScrollView(
         child: Container(
             margin: EdgeInsets.only(top: 20),
@@ -62,12 +51,13 @@ class _checkoutState extends State<checkout> {
                   child: Card(
                     elevation: 20,
                     child: Container(
-                      decoration: BoxDecoration(
+                      padding: EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
                           gradient: LinearGradient(colors: [
                         Colors.brown,
                         Colors.deepPurpleAccent
                       ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
-                      padding: EdgeInsets.all(10),
+
                       child: Column(
                         children: [
                           //Text("Price Details", style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold)),
@@ -236,7 +226,13 @@ class _checkoutState extends State<checkout> {
                             style: ButtonStyle(
                                 elevation: MaterialStateProperty.all(10)),
                             onPressed: () {
-                              payment_razorpay(total_payable_amount,user_email.text,user_contactnum.text);
+                              payment_razorpay(
+                                  total_payable_amount,
+                                  cart_value.toString(),
+                                  user_name.text,
+                                  user_email.text,
+                                  user_contactnum.text,
+                                  ("${user_address.text},${user_state.text},${user_zipcode.text}").toString());
                             },
                             child: const Text("Place Order")),
                       )

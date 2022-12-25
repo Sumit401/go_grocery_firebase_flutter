@@ -1,10 +1,10 @@
-import 'package:cabs/cart/checkout.dart';
-import 'package:cabs/grocery_list/grocery_items_listview.dart';
+import 'package:cabs/payment_checkout/price_detail_checkout.dart';
+
 import 'package:cabs/homepage/homepage.dart';
 import 'package:cabs/main_screens/login_page.dart';
 import 'package:cabs/profile/profile_main.dart';
 import 'package:cabs/main_screens/register.dart';
-import 'package:cabs/cart/cart_navigation.dart';
+import 'package:cabs/cart/your_cart.dart';
 import 'package:cabs/main_screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
         homepage.route:(_)=>homepage(),
         //grocery_items_listview.route:(_)=>grocery_items_listview(),
         profile_main.route:(_)=>profile_main(),
-        cart_item.route:(_)=>cart_item(),
-        checkout.route:(_)=>checkout(),
+        your_cart.route:(_)=>your_cart(),
+        price_detail_checkout.route:(_)=>price_detail_checkout(),
       },
         home: AnimatedSplashScreen(
           nextScreen: email == "null" ? splash_screen() : homepage(),

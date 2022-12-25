@@ -1,4 +1,4 @@
-import 'package:cabs/cart/cart_navigation.dart';
+import 'package:cabs/cart/your_cart.dart';
 import 'package:cabs/homepage/homepage.dart';
 import 'package:cabs/profile/profile_main.dart';
 import 'package:cabs/reusable_widgets.dart';
@@ -45,7 +45,7 @@ class _bottom_navbarState extends State<bottom_navbar> {
       }else if(index==1 && current_index_bottom_navbar!=1){
         getcart_item_pricecount();
         Navigator.pop(context);
-        Navigator.pushNamed(context, cart_item.route);
+        Navigator.pushNamed(context, your_cart.route);
 
       }else if(index==2 && current_index_bottom_navbar!=2){
         Navigator.pop(context);
