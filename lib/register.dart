@@ -50,10 +50,17 @@ class _registerState extends State<register> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    child: const Text("Register to Us",
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    child: const Text("Sign Up",
                         style: TextStyle(
                             fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                  ),
+                  Container(
+                    child: const Text("Create an Account, its free",
+                        style: TextStyle(
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),
                   ),
@@ -74,7 +81,7 @@ class _registerState extends State<register> {
                   InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, login.route);
+                      Navigator.pushNamed(context, login_page.route);
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 20),

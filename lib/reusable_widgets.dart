@@ -1,11 +1,13 @@
-import 'package:cabs/checkout.dart';
-import 'package:cabs/grocery_items_listview.dart';
+import 'package:cabs/cart/checkout.dart';
+import 'package:cabs/profile/dialog_box.dart';
+import 'package:cabs/grocery_list/grocery_items_listview.dart';
 import 'package:cabs/homepage.dart';
 import 'package:cabs/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,8 +21,8 @@ final google_signin=GoogleSignIn();
 Widget formfield_for_email(String text,
     TextEditingController editingController) {
   return (Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(10),
@@ -41,8 +43,8 @@ Widget formfield_for_email(String text,
 Widget formfield_for_password(String text,
     TextEditingController editingController) {
   return (Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(10),
@@ -63,8 +65,8 @@ Widget formfield_for_password(String text,
 
 Widget formfield_for_name(String text,TextEditingController editingController) {
   return (Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(10),
@@ -79,21 +81,21 @@ Widget formfield_for_name(String text,TextEditingController editingController) {
           validator: RequiredValidator(errorText: "Required"))));
 }
 
-Widget button_for_registration(BuildContext context, String user_email, String user_password, String user_name){
+Widget button_for_registration(BuildContext context, String userEmail, String userPassword, String userName){
   return ElevatedButton(
       onPressed: () {
         FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-            email: user_email,
-            password:user_password)
+            email: userEmail,
+            password:userPassword)
             .then((value) async{
-          print("Registration Successful");
+          //print("Registration Successful");
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          sharedPreferences.setString("email", user_email);
-          sharedPreferences.setString("name", user_name);
+          sharedPreferences.setString("user_email", userEmail);
+          sharedPreferences.setString("user_name", userName);
           short_flutter_toast("Registration Successful");
           Navigator.pop(context);
-          Navigator.pushNamed(context, login.route);
+          Navigator.pushNamed(context, login_page.route);
         }).onError((error, stackTrace) {
           FocusManager.instance.primaryFocus?.unfocus();
           long_flutter_toast("User Already Registered! Please Login");
@@ -101,7 +103,7 @@ Widget button_for_registration(BuildContext context, String user_email, String u
         });
       },
       child: Text("Register Now"),
-      style: ButtonStyle(
+      style: const ButtonStyle(
           backgroundColor:
           MaterialStatePropertyAll(Colors.lightGreen)));
 }
@@ -120,8 +122,8 @@ Widget google_sign_in_buttons(BuildContext context) {
               );
               await firebase_auth.signInWithCredential(authcredential);
               SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-              sharedPreferences.setString("email", (FirebaseAuth.instance.currentUser?.email).toString());
-              sharedPreferences.setString("name", (FirebaseAuth.instance.currentUser?.displayName).toString());
+              sharedPreferences.setString("user_email", (FirebaseAuth.instance.currentUser?.email).toString());
+              sharedPreferences.setString("user_name", (FirebaseAuth.instance.currentUser?.displayName).toString());
               sharedPreferences.setString("user_image", (FirebaseAuth.instance.currentUser?.photoURL).toString());
               Navigator.pop(context);
               Navigator.pushNamed(context, homepage.route);
@@ -146,7 +148,8 @@ Widget google_sign_in_buttons(BuildContext context) {
 
 Widget facebook_sign_in_button() {
   return (ElevatedButton(
-    onPressed: () {},
+    onPressed: () {
+    },
     style: const ButtonStyle(
         shape: MaterialStatePropertyAll(CircleBorder()),
         backgroundColor:
@@ -157,6 +160,23 @@ Widget facebook_sign_in_button() {
       height: 50,
     ),
   ));
+}
+
+
+AppBar appbar_display(String displayTitle){
+  return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.asset(
+          "assets/images/app_logo.png",
+          width: 70,
+          height: 70,
+
+        ),
+      ),
+      title: Text(displayTitle, style: TextStyle(color: Colors.white)),
+      centerTitle: true,
+      backgroundColor: Colors.blueAccent);
 }
 
 Future<bool?> long_flutter_toast(String message){
@@ -185,31 +205,43 @@ google_sign_out() async{
   google_signin.signOut();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sharedPreferences.remove("email");
+  sharedPreferences.remove("name");
+  sharedPreferences.remove("user_image");
+  sharedPreferences.remove("cart_price");
+  sharedPreferences.remove("value");
 }
 
 
 
 Future<int> getcart_item_pricecount() async{
-  int cart_value=0;
-  int cart_price=0;
+  int cartValue=0;
+  int cartPrice=0;
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  var email = sharedPreferences.getString("email").toString();
+  var email = sharedPreferences.getString("user_email").toString();
   FirebaseFirestore.instance.collection("Cart").get().then((value) {
     value.docs.forEach((element) {
       FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
         if(value2.data()!['email']==email){
-          cart_value = cart_value + (value2.data()!['quantity']) as int,
-          cart_price = cart_price + ((value2.data()!['price']) as int) * ((value2.data()!['quantity']) as int),
-          sharedPreferences.setInt("cart_price", cart_price),
-          sharedPreferences.setInt("value", cart_value),
-          //print(sharedPreferences.getInt("value")),
-          //print(sharedPreferences.getInt("cart_price"))
+          cartValue = cartValue + (value2.data()!['quantity']) as int,
+          cartPrice = cartPrice + ((value2.data()!['price']) as int) * ((value2.data()!['quantity']) as int),
+          sharedPreferences.setInt("cart_price", cartPrice),
+          sharedPreferences.setInt("cart_value", cartValue),
         }
       });
     });
   });
-    return(cart_value);
+    return(cartValue);
   }
+
+Widget checkout_button(BuildContext context){
+  return ElevatedButton(
+      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+      onPressed: () async {
+        getcart_item_pricecount();
+        Navigator.pushNamed(context, checkout.route);
+      },
+      child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
+}
 
 
 
@@ -241,114 +273,99 @@ Future<Position> determinePosition() async {
 
 Future<Placemark> getaddress (Position position) async {
   List placemark = await placemarkFromCoordinates(position.latitude, position.longitude);
-  //print(placemark[0]);
-  print(placemark[0]);
   return placemark[0];
 }
 
-Widget button_for_checkout(BuildContext context){
-  return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-      onPressed: () async {
-        int cart_value2 = 0;
-        SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-        var email = sharedPreferences.getString("email").toString();
-        FirebaseFirestore.instance
-            .collection("Cart").get().then((value) {
-          value.docs.forEach((element) {
-            FirebaseFirestore.instance
-                .collection("Cart").doc(element.id).get()
-                .then((value2) => {
-              if (value2.data()!['email'] == email)
-                {
-                  cart_value2 = cart_value2 +
-                      (value2.data()!['quantity']) as int,
-                  sharedPreferences.setInt(
-                      "value", cart_value2),
-                  //print(sharedPreferences.getInt("value"))
-                }
-            });
-          });
-        });
-        Navigator.pushNamed(context, checkout.route);
-      },
-      child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
-}
-
-Future dialogbox_aboutus(BuildContext context){
-  return (showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(20))),
-          title: const Text("About Us",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-          content: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Spare more with 'Go Grocery!' We give you the most minimal costs on the entirety of your grocery needs.‘Go Grocery’ is a low-cost online general store that gets items crosswise over classifications like grocery, natural products and vegetables, excellence and health, family unit care, infant care, pet consideration, and meats and fish conveyed to your doorstep.Browse more than 5,000 items at costs lower than markets each day!Calendar conveyance according to your benefit.",
-              textAlign: TextAlign.justify,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-          elevation: 20,
-          icon: Image.asset(
-            "assets/images/app_logo.png",
-            height: 100,
-            width: 100,
-          ),
-          iconPadding:
-          EdgeInsets.symmetric(vertical: 20),
-        );
-      }));
-}
-
-
-Widget homepage_category(BuildContext context, String category_type){
+Widget homepage_category(BuildContext context, String categoryType){
   return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return grocery_items_listview();
-        }));
-      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-
             Container(
-                child: category_type == "Fresh Fruits" ? Image.network(
-                  "https://www.seekpng.com/png/detail/434-4347412_tropical-png-illustration-tropical-fruits-png.png",
+                child: categoryType == "Fresh Fruits" ? Image.asset("assets/images/fruits.jpg",
                   height: 100, width: 100,)
-                    : category_type == "Fresh Vegetables" ? Image.network(
-                  "https://www.healthyeating.org/images/default-source/home-0.0/nutrition-topics-2.0/general-nutrition-wellness/2-2-2-2foodgroups_vegetables_detailfeature.jpg",
+                    : categoryType == "Fresh Vegetables" ? Image.asset("assets/images/veg.jpg",
                   height: 100, width: 100,)
-                    : category_type == "Dairy Products" ? Image.network(
-                  "https://domf5oio6qrcr.cloudfront.net/medialibrary/9685/iStock-544807136.jpg",
+                    : categoryType == "Dairy Products" ? Image.asset("assets/images/dairy.jpg",
                   height: 100, width: 100,)
-                    : category_type == "Food-grains" ? Image.network(
-                  "https://qph.cf2.quoracdn.net/main-qimg-4921d9634104fb2d0bdfd154f93b5d7f.webp",
+                    : categoryType == "Food-Grains" ? Image.asset("assets/images/food_grains.jpg",
                   height: 100, width: 100,)
-                    : category_type == "Cleaning and Household" ? Image.network(
-                  "https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/743/cached.offlinehbpl.hbpl.co.uk/news/OMC/988EAC9D-00F5-EEE9-6A89B0F36DBAF81C.jpg",
+                    : categoryType == "Cleaning and Household" ? Image.asset("assets/images/household.jpg",
                   height: 100, width: 100,)
-                    : category_type == "Beverages" ?Image.network(
-                  "https://agronfoodprocessing.com/wp-content/uploads/2021/03/beve.jpg",
-                  height: 100, width: 100,) : Image.asset("assets/images/user_img.png",width: 100,height: 100,)
+                    : categoryType == "Beverages" ?Image.asset("assets/images/beverages.jpg",
+                  height: 100, width: 100,) : Image.asset("assets/images/user_img.png", width: 100,height: 100,)
             ),
-          Container(
-              width: 120,
-              child: Text(category_type,
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
-              )),
-        ],
-      ));
-  
-  
-  
+        Container(
+            width: 120,
+            padding: EdgeInsets.only(bottom: 20),
+            child: Text(
+              categoryType,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            )),
+      ],
+    ),
+    onTap: () async {
+      Navigator.push(context, MaterialPageRoute(builder:(context) => grocery_items_listview(categoryType: categoryType) ));
+    });
+}
+
+Widget userimage_display(String userImage){
+  return Container(
+    width: 100,
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(50),
+      image: const DecorationImage(
+        image: AssetImage('assets/images/user_img.png'),
+        fit: BoxFit.fill,
+      ),
+    ),
+    child: FadeInImage.assetNetwork(
+      fit: BoxFit.fitWidth,
+      placeholder: 'assets/images/user_img.png',
+      image: userImage,
+      imageErrorBuilder: (context, error, stackTrace) {
+        return (Image.asset(
+          'assets/images/user_img.png',
+          height: 100,
+          width: 100,
+        ));
+      },
+      height: 100,
+      width: 100,
+    ),
+  );
+}
+
+
+Widget profile_navigations(BuildContext context, String tab){
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 20),
+    width: MediaQuery.of(context).size.width,
+    child: ElevatedButton(
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all(10),
+        backgroundColor:
+        MaterialStateProperty.all(Colors.lightBlueAccent),
+      ),
+      child: Text(tab,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      onPressed: () {
+        if(tab=="About Us") {
+          dialogbox_aboutus(context);
+        } else if(tab=="Contact Us") {
+          dialogbox_contactus(context);
+        } else if(tab=="Logout") {
+          google_sign_out();
+          Navigator.pop(context);
+          Navigator.pushNamed(context, login_page.route);
+        }
+      },
+    ),
+  );
 }

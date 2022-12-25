@@ -6,21 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class login extends StatefulWidget {
-  const login({Key? key}) : super(key: key);
-  static const route = "/login";
+class login_page extends StatefulWidget {
+  const login_page({Key? key}) : super(key: key);
+  static const route = "/login_page";
 
   @override
-  State<login> createState() => _loginState();
+  State<login_page> createState() => _login_pageState();
 }
 
-class _loginState extends State<login> {
+class _login_pageState extends State<login_page> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  TextEditingController texteditingcontroller_email =
-      new TextEditingController();
-  TextEditingController texteditingcontroller_password =
-      TextEditingController();
+  TextEditingController texteditingcontroller_email =  TextEditingController();
+  TextEditingController texteditingcontroller_password = TextEditingController();
 
 
   @override
@@ -54,10 +52,19 @@ class _loginState extends State<login> {
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20),
-                  child: const Text("Welcome Back! ",
+                  child: const Text("Login",
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text("Welcome Back !  Login with your Credentials",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white)),
                 ),
                 formfield_for_email("Email", texteditingcontroller_email),
@@ -71,7 +78,7 @@ class _loginState extends State<login> {
                           .then(
                         (value) async {
                           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                          sharedPreferences.setString("email", texteditingcontroller_email.text.toString());
+                          sharedPreferences.setString("user_email", texteditingcontroller_email.text.toString());
 
                           short_flutter_toast("Login Successful");
                           Navigator.pop(context);

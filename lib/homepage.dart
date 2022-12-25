@@ -1,4 +1,4 @@
-import 'package:cabs/bottom_navbar.dart';
+import 'package:cabs/bottom_navbar/bottom_navbar.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +17,7 @@ class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Go Grocery"), centerTitle: true,elevation: 20,leading: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Image.asset(
-          "assets/images/app_logo.png",
-          width: 70,
-          height: 70,
-        ),
-      ),),
+      appBar: appbar_display("Go Grocery"),
       body: Container(
         child: Column(
           children: [
@@ -66,10 +59,10 @@ class _homepageState extends State<homepage> {
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     alignment: Alignment.center,
                     height: 40,
-                      color: Colors.red,
+                      color: Colors.lightBlueAccent,
                       child: Text(
                         "Shop by Category",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: TextStyle(fontSize: 22, color: Colors.black,fontWeight: FontWeight.bold,letterSpacing: 3),
                       )),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,7 +77,7 @@ class _homepageState extends State<homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      homepage_category(context,"Food-grains"),
+                      homepage_category(context,"Food-Grains"),
                       homepage_category(context,"Cleaning and Household"),
                       homepage_category(context,"Beverages"),
                     ],
