@@ -1,69 +1,38 @@
-import 'package:cabs/bottom_navbar/bottom_navbar.dart';
+import 'package:cabs/main_screens/login_page.dart';
+import 'package:cabs/profile/dialog_box.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class profile extends StatefulWidget {
-  const profile({Key? key}) : super(key: key);
-  static const route = "/profile";
 
-  @override
-  State<profile> createState() => _profileState();
-}
-
-class _profileState extends State<profile> {
-  String user_email = "";
-  String user_name = "";
-  String user_image = "";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getsharedpref();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appbar_display("My Profile"),
-      bottomNavigationBar: bottom_navbar(),
-      body: Container(
-        margin: const EdgeInsets.only(top: 20),
-        alignment: Alignment.topCenter,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          userimage_display(user_image.toString()),
-          Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(user_name,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
-          Container(margin: EdgeInsets.only(top: 10), child: Text(user_email)),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              children: [
-                profile_navigations(context,"My Account"),
-                profile_navigations(context, "My Orders"),
-                profile_navigations(context, "About Us"),
-                profile_navigations(context, "Contact Us"),
-                profile_navigations(context, "Logout"),
-              ],
-            ),
-          )
-        ]),
+Widget profile_navigations(BuildContext context, String tab){
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 20),
+    width: MediaQuery.of(context).size.width,
+    child: ElevatedButton(
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all(10),
+        backgroundColor:
+        MaterialStateProperty.all(Colors.lightBlueAccent),
       ),
-    );
-  }
-
-  void getsharedpref() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var email = sharedPreferences.getString("user_email").toString();
-    var name = sharedPreferences.getString("user_name").toString();
-    var image = sharedPreferences.getString("user_image").toString();
-    setState(() {
-      user_email = email;
-      user_name = name;
-      user_image = image;
-    });
-  }
+      child: Text(tab,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      onPressed: () {
+        if(tab=="About Us") {
+          dialogbox_aboutus(context);
+        } else if(tab=="Contact Us") {
+          dialogbox_contactus(context);
+        } else if(tab=="Logout") {
+          google_sign_out();
+          Navigator.pop(context);
+          Navigator.pushNamed(context, login_page.route);
+        }
+      },
+    ),
+  );
 }
+
+

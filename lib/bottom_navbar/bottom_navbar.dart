@@ -1,6 +1,6 @@
 import 'package:cabs/cart/cart_navigation.dart';
-import 'package:cabs/homepage.dart';
-import 'package:cabs/profile/profile_navigation.dart';
+import 'package:cabs/homepage/homepage.dart';
+import 'package:cabs/profile/profile_main.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,7 +49,7 @@ class _bottom_navbarState extends State<bottom_navbar> {
 
       }else if(index==2 && current_index_bottom_navbar!=2){
         Navigator.pop(context);
-        Navigator.pushNamed(context, profile.route);
+        Navigator.pushNamed(context, profile_main.route);
       }
       current_index_bottom_navbar=index;
     });
