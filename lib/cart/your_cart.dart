@@ -18,6 +18,7 @@ var user_email = "";
 int cart_value=0;
 var data_value ="0";
 
+
 class _your_cartState extends State<your_cart> {
   @override
   void initState() {
@@ -29,52 +30,49 @@ class _your_cartState extends State<your_cart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar_display("Your Cart"),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: listview(),
-              height: MediaQuery.of(context).size.height / 1.3,
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: checkout_button(context)
-                ))
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 1.4,
+            child: listview(),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: checkout_button(context)
+              ))
+        ],
       ),
       bottomNavigationBar: bottom_navbar(),
     );
   }
 
-
   Widget listview() {
-    return Card(
-      child: StreamBuilder(
-        stream: fire_storedb,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container(alignment: Alignment.center, child: CircularProgressIndicator());
-          }
-          return (ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              if (snapshot.data!.docs[index]['email'].toString() == user_email) {
-                return (get_cart_items_list(snapshot, index));
-              }
-              else {
-                return (Container());
-              }
-            },
-          ));
-        },
-      ),
+    return StreamBuilder(
+      stream: fire_storedb,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container(alignment: Alignment.center, child: CircularProgressIndicator());
+        }
+        return (ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            if (snapshot.data!.docs[index]['email'].toString() == user_email) {
+              return (get_cart_items_list(snapshot, index,context));
+            }
+            else {
+              return (Container());
+            }
+          },
+        ));
+
+      }
     );
+
   }
   void getsharedpreferences() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

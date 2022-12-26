@@ -1,181 +1,47 @@
 import 'package:cabs/payment_checkout/price_detail_checkout.dart';
 import 'package:cabs/grocery_list/grocery_items_listview.dart';
-import 'package:cabs/homepage/homepage.dart';
-import 'package:cabs/main_screens/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geocoding/geocoding.dart';
 
 
-final firebase_auth=FirebaseAuth.instance;
-final google_signin=GoogleSignIn();
 
-Widget formfield_for_email(String text,
-    TextEditingController editingController) {
-  return (Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration: BoxDecoration(
-          border: Border.all(width: 1),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white),
-      child: TextFormField(
-          controller: editingController,
-          autocorrect: true,
-          decoration: InputDecoration(
-            labelText: text,
-            border: InputBorder.none,
-          ),
-          validator: MultiValidator([
-            RequiredValidator(errorText: "Required"),
-            EmailValidator(errorText: "Enter Valid Email")
-          ]))));
-}
-
-Widget formfield_for_password(String text,
-    TextEditingController editingController) {
-  return (Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration: BoxDecoration(
-          border: Border.all(width: 1),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white),
-      child: TextFormField(
-          obscureText: true,
-          controller: editingController,
-          autocorrect: true,
-          decoration: InputDecoration(
-            labelText: text,
-            border: InputBorder.none,
-          ),
-          validator: MultiValidator([
-            RequiredValidator(errorText: "Required"),
-            MinLengthValidator(6, errorText: "Minimum length 6")
-          ]))));
-}
-
-Widget formfield_for_name(String text,TextEditingController editingController) {
-  return (Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration: BoxDecoration(
-          border: Border.all(width: 1),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white),
-      child: TextFormField(
-          controller: editingController,
-          autocorrect: true,
-          decoration: InputDecoration(
-            labelText: text,
-            border: InputBorder.none,
-          ),
-          validator: RequiredValidator(errorText: "Required"))));
-}
-
-Widget button_for_registration(BuildContext context, String userEmail, String userPassword, String userName){
-  return ElevatedButton(
-      onPressed: () {
-        FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-            email: userEmail,
-            password:userPassword)
-            .then((value) async{
-          //print("Registration Successful");
-          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          sharedPreferences.setString("user_email", userEmail);
-          sharedPreferences.setString("user_name", userName);
-          short_flutter_toast("Registration Successful");
-          Navigator.pop(context);
-          Navigator.pushNamed(context, login_page.route);
-        }).onError((error, stackTrace) {
-          FocusManager.instance.primaryFocus?.unfocus();
-          long_flutter_toast("User Already Registered! Please Login");
-          print(error.toString());
-        });
-      },
-      child: Text("Register Now"),
-      style: const ButtonStyle(
-          backgroundColor:
-          MaterialStatePropertyAll(Colors.lightGreen)));
-}
-
-Widget google_sign_in_buttons(BuildContext context) {
-  return (
-      ElevatedButton(
-        onPressed: () async{
-          try{
-            final GoogleSignInAccount? googleSigninAccount= await google_signin.signIn();
-            if(googleSigninAccount!= null){
-              final GoogleSignInAuthentication googleSigninAuth = await googleSigninAccount.authentication;
-              final AuthCredential authcredential= GoogleAuthProvider.credential(
-                accessToken: googleSigninAuth.accessToken,
-                idToken: googleSigninAuth.idToken
-              );
-              await firebase_auth.signInWithCredential(authcredential);
-              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-              sharedPreferences.setString("user_email", (FirebaseAuth.instance.currentUser?.email).toString());
-              sharedPreferences.setString("user_name", (FirebaseAuth.instance.currentUser?.displayName).toString());
-              sharedPreferences.setString("user_image", (FirebaseAuth.instance.currentUser?.photoURL).toString());
-              Navigator.pop(context);
-              Navigator.pushNamed(context, homepage.route);
-            }
-          }on FirebaseAuthException catch(e){
-            print(e.toString());
-            throw e;
-          }
-        },
-        style: const ButtonStyle(
-            shape: MaterialStatePropertyAll(CircleBorder()),
-            backgroundColor:
-            MaterialStatePropertyAll(Colors.white)),
-        child: Image.asset(
-          "assets/images/google_logo.png",
-          width: 50,
-          height: 50,
-        ),
-      )
-  );
-}
-
-Widget facebook_sign_in_button() {
-  return (ElevatedButton(
-    onPressed: () {
-    },
-    style: const ButtonStyle(
-        shape: MaterialStatePropertyAll(CircleBorder()),
-        backgroundColor:
-        MaterialStatePropertyAll(Colors.white)),
-    child: Image.asset(
-      "assets/images/fb_logo.png",
-      width: 50,
-      height: 50,
-    ),
-  ));
-}
 
 
 AppBar appbar_display(String displayTitle){
-  return AppBar(
+
+  if(displayTitle=="Your Cart") {
+    return AppBar(
       leading: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Image.asset(
           "assets/images/app_logo.png",
           width: 70,
           height: 70,
-
         ),
       ),
       title: Text(displayTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       backgroundColor: Colors.blueAccent);
+  }
+  else{
+    return AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Image.asset(
+              "assets/images/app_logo.png",
+              width: 70,
+              height: 70,
+            ),
+          ),
+          title: Text(displayTitle, style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: Colors.blueAccent);
+  }
 }
 
 Future<bool?> long_flutter_toast(String message){
@@ -199,18 +65,6 @@ Future<bool?> short_flutter_toast(String message){
           fontSize: 16.0));
 }
 
-google_sign_out() async{
-  firebase_auth.signOut();
-  google_signin.signOut();
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  sharedPreferences.remove("email");
-  sharedPreferences.remove("name");
-  sharedPreferences.remove("user_image");
-  sharedPreferences.remove("cart_price");
-  sharedPreferences.remove("value");
-}
-
-
 
 Future<int> getcart_item_pricecount() async{
   int cartValue=0;
@@ -233,13 +87,16 @@ Future<int> getcart_item_pricecount() async{
   }
 
 Widget checkout_button(BuildContext context){
-  return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-      onPressed: () async {
-        getcart_item_pricecount();
-        Navigator.pushNamed(context, price_detail_checkout.route);
-      },
-      child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),));
+  return Container(
+    alignment: Alignment.center,
+    child: ElevatedButton(
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+        onPressed: () async {
+          getcart_item_pricecount();
+          Navigator.pushNamed(context, price_detail_checkout.route);
+        },
+        child: Text("Proceed to Checkout",style: TextStyle(color: Colors.white),)),
+  );
 }
 
 
@@ -270,6 +127,7 @@ Future<Position> determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
+// Get Place address API...................................
 Future<Placemark> getaddress (Position position) async {
   List placemark = await placemarkFromCoordinates(position.latitude, position.longitude);
   return placemark[0];
@@ -297,8 +155,7 @@ Widget homepage_category(BuildContext context, String categoryType){
         Container(
             width: 120,
             padding: EdgeInsets.only(bottom: 20),
-            child: Text(
-              categoryType,
+            child: Text(categoryType,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
@@ -348,4 +205,21 @@ AppBar app_bar_with_back_button(BuildContext context, String title){
       elevation: 10,
       backgroundColor: Colors.blueAccent,
       centerTitle: true);
+}
+
+
+count_no_of_orders() async {
+  int count=0;
+  SharedPreferences preferences=await SharedPreferences.getInstance();
+  FirebaseFirestore.instance.collection('orders').get().then((value) {
+    value.docs.forEach((element) {
+      element.data().forEach((key, value2) {
+        if(key=="email"&& value2== preferences.getString("user_email")){
+          count++;
+          preferences.setInt("count_no_of_orders", count);
+        }
+      });
+    });
+  },);
+
 }

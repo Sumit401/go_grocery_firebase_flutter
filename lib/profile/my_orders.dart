@@ -20,7 +20,8 @@ class _my_ordersState extends State<my_orders> {
   }
   String user_email="";
   var firebase_auth=FirebaseFirestore.instance.collection("orders").snapshots();
-  
+
+  int count=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,23 +32,26 @@ class _my_ordersState extends State<my_orders> {
           stream: firebase_auth,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Container(alignment: Alignment.center,
-                  child: const CircularProgressIndicator());
-            }
+                return Container(alignment: Alignment.center, child: const CircularProgressIndicator());
+              }
+
             return Container(
-              padding: EdgeInsets.all(10),
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(10),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: snapshot.data!.size,
-                  itemBuilder:(context, index) {
-                    if(snapshot.data!.docs[index]["email"]==user_email.toString())
-                      return(get_myorders_list(snapshot,index));
-                    else
-                      return(Container());
+                  itemBuilder: (context, index) {
+                    if (snapshot.data!.docs[index]["email"] ==
+                        user_email.toString()) {
+                      return (get_myorders_list(snapshot, index));
+                    } else
+                      return (Container());
                   },),
-            );
-          },
+              );
+            }
+            ,
+
         ),
       ),
     );

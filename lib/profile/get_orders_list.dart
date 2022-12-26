@@ -47,12 +47,15 @@ Widget get_myorders_list(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Total Amount Paid",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
+                Text("Amount Paid",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
                 Text(snapshot.data!.docs[index]['cart_price'].toString(),style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400)),
               ],
             ),
           ),
-          Text("Shipping Address",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
+          Container(
+            margin: EdgeInsets.only(top: 10,bottom: 5),
+              child: Text("Shipping Address",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
           //Text(snapshot.data!.docs[index]['name']),
           Padding(
             padding: const EdgeInsets.all(8.0),

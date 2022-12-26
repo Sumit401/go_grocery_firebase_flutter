@@ -18,11 +18,12 @@ class _homepageState extends State<homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar_display("Go Grocery"),
-      body: Container(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
             SizedBox(
-                height: 300,
+                height: 250,
                 child: StreamBuilder(
                   stream: fire_storedb,
                   builder: (context, snapshot) {
@@ -48,7 +49,8 @@ class _homepageState extends State<homepage> {
                         ));
                   },
                 )),
-            Padding(
+            Container(
+              width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(18.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,22 +66,32 @@ class _homepageState extends State<homepage> {
                         "Shop by Category",
                         style: TextStyle(fontSize: 22, color: Colors.black,fontWeight: FontWeight.bold,letterSpacing: 3),
                       )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  Column(
                     children: [
-                      homepage_category(context,"Fresh Fruits"),
-                      homepage_category(context,"Fresh Vegetables"),
-                      homepage_category(context,"Dairy Products"),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      homepage_category(context,"Food-Grains"),
-                      homepage_category(context,"Cleaning and Household"),
-                      homepage_category(context,"Beverages"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          homepage_category(context,"Fresh Fruits"),
+                          homepage_category(context,"Fresh Vegetables"),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          homepage_category(context,"Food-Grains"),
+                          homepage_category(context,"Cleaning and Household"),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          homepage_category(context,"Dairy Products"),
+                          homepage_category(context,"Beverages"),
+                        ],
+                      ),
                     ],
                   ),
                 ],

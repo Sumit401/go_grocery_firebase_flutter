@@ -60,54 +60,47 @@ Widget grocery_list(
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        InkWell(
-                          child: Icon(FontAwesomeIcons.plus),
-                          onTap: () async {
-                            int k = 0;
-                            String? docid = snapshot.data?.docs[index].reference.id;
-                            SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                            var user_email = sharedPreferences.getString("user_email").toString();
-                            Map<String,dynamic> data_to_save = {
-                              "grocery_id": docid,
-                              "quantity": 1,
-                              "email": user_email,
-                              "name": snapshot.data!.docs[index]['name'],
-                              "price": snapshot.data!.docs[index]['price'],
-                              "si": snapshot.data!.docs[index]['si'],
-                              "image": snapshot.data!.docs[index]['image'],
-                            };
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Icon(FontAwesomeIcons.plus),
+                        onTap: () async {
+                          int k = 0;
+                          String? docid = snapshot.data?.docs[index].reference.id;
+                          SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                          var user_email = sharedPreferences.getString("user_email").toString();
+                          Map<String,dynamic> data_to_save = {
+                            "grocery_id": docid,
+                            "quantity": 1,
+                            "email": user_email,
+                            "name": snapshot.data!.docs[index]['name'],
+                            "price": snapshot.data!.docs[index]['price'],
+                            "si": snapshot.data!.docs[index]['si'],
+                            "image": snapshot.data!.docs[index]['image'],
+                          };
 
-                            FirebaseFirestore.instance.collection("Cart").get().then((value) {
-                              value.docs.forEach((element) {
-                                FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) =>
-                                {
-                                  if(value2.data()!['grocery_id'] == docid && value2.data()!['email']==user_email)
-                                    {
-                                      cart_value = (value2.data()!['quantity']),
-                                      FirebaseFirestore.instance.collection(
-                                          "Cart").doc(element.id).update(
-                                          {"quantity": cart_value+1})
-                                    }else {
-                                    k+=1,
-                                    if(value.docs.length==k){
-                                      FirebaseFirestore.instance
-                                          .collection("Cart")
-                                          .add(data_to_save),
-                                    }
-                              }
-                                });
-                                });
-                            });
-                          },
-                        ),
-                        const VerticalDivider(
-                          width: 10,
-                        ),
-                      ],
+                          FirebaseFirestore.instance.collection("Cart").get().then((value) {
+                            value.docs.forEach((element) {
+                              FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) =>
+                              {
+                                if(value2.data()!['grocery_id'] == docid && value2.data()!['email']==user_email)
+                                  {
+                                    cart_value = (value2.data()!['quantity']),
+                                    FirebaseFirestore.instance.collection(
+                                        "Cart").doc(element.id).update(
+                                        {"quantity": cart_value+1})
+                                  }else {
+                                  k+=1,
+                                  if(value.docs.length==k){
+                                    FirebaseFirestore.instance.collection("Cart").add(data_to_save),
+                                  }
+                            }
+                              });
+                              });
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),

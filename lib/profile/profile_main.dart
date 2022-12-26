@@ -31,26 +31,29 @@ class _profile_mainState extends State<profile_main> {
       body: Container(
         margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.topCenter,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          userimage_display(user_image.toString()),
-          Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(user_name,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
-          Container(margin: EdgeInsets.only(top: 10), child: Text(user_email)),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              children: [
-                profile_navigations(context,"My Account"),
-                profile_navigations(context, "My Orders"),
-                profile_navigations(context, "About Us"),
-                profile_navigations(context, "Contact Us"),
-                profile_navigations(context, "Logout"),
-              ],
-            ),
-          )
-        ]),
+        child: SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            userimage_display(user_image.toString()),
+            Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(user_name,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
+            Container(margin: EdgeInsets.only(top: 10), child: Text(user_email)),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                children: [
+                  //profile_navigations(context,"My Account"),
+                  profile_navigations(context, "My Orders"),
+                  profile_navigations(context, "About Us"),
+                  profile_navigations(context, "Contact Us"),
+                  profile_navigations(context, "Help"),
+                  profile_navigations(context, "Logout"),
+                ],
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }

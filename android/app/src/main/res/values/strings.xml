@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go Grocery</string>
+    <string name="facebook_app_id">961094111523881</string>
+    <string name="fb_login_protocol_scheme">fb961094111523881</string>
+    <string name="facebook_client_token">a46c1d6706de6e8a578f297238f6d133</string>
+</resources>

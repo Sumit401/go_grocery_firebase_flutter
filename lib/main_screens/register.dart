@@ -1,10 +1,7 @@
-import 'package:cabs/main_screens/login_page.dart';
-import 'package:cabs/reusable_widgets.dart';
+import 'package:cabs/main_screens/resusable_widget_login_register.dart';
+import 'package:cabs/main_screens/social_media_login.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class register extends StatefulWidget {
   const register({Key? key}) : super(key: key);
@@ -76,23 +73,14 @@ class _registerState extends State<register> {
                       "Password", texteditingcontroller_password),
                   Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: button_for_registration(context,texteditingcontroller_email.text,texteditingcontroller_name.text,texteditingcontroller_name.text),
+                    child: button_for_registration(
+                        context,
+                        texteditingcontroller_email.text,
+                        texteditingcontroller_password.text,
+                        texteditingcontroller_name.text,
+                        formvalidationkey),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, login_page.route);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 20),
-                      child: Center(
-                          child: Text("Already Registered? Click here to Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15))),
-                    ),
-                  ),
+                  already_registered(context),
                   // Container For Facebook and Google SignIn buttons.......................///
                   Container(
                     margin: EdgeInsets.only(top: 20),

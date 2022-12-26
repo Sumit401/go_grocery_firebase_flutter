@@ -1,10 +1,7 @@
-import 'package:cabs/homepage/homepage.dart';
-import 'package:cabs/main_screens/register.dart';
-import 'package:cabs/reusable_widgets.dart';
+import 'package:cabs/main_screens/resusable_widget_login_register.dart';
+import 'package:cabs/main_screens/social_media_login.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class login_page extends StatefulWidget {
   const login_page({Key? key}) : super(key: key);
@@ -24,8 +21,6 @@ class _login_pageState extends State<login_page> {
   @override
   Widget build(BuildContext context) {
     return (Scaffold(
-      //resizeToAvoidBottomInset: false,
-      //appBar: AppBar(title: Text("Login Page")),
       body: Container(
         transformAlignment: Alignment.center,
         height: MediaQuery.of(context).size.height,
@@ -69,49 +64,8 @@ class _login_pageState extends State<login_page> {
                 ),
                 formfield_for_email("Email", texteditingcontroller_email),
                 formfield_for_password("Password", texteditingcontroller_password),
-                ElevatedButton(
-                    onPressed: () {
-                      FirebaseAuth.instance
-                          .signInWithEmailAndPassword(
-                              email: texteditingcontroller_email.text,
-                              password: texteditingcontroller_password.text)
-                          .then(
-                        (value) async {
-                          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                          sharedPreferences.setString("user_email", texteditingcontroller_email.text.toString());
-
-                          short_flutter_toast("Login Successful");
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, homepage.route);
-                        },
-                      ).onError(
-                        (error, stackTrace) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          long_flutter_toast("Invalid Email or Password");
-                          print(error.toString());
-                        },
-                      );
-                    },
-                    child: Text("Login"),
-                    style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.green),
-                        textStyle: MaterialStatePropertyAll(TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)))),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, register.route);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: const Center(
-                        child: Text("Not a User? Click here Register to Us!",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15))),
-                  ),
-                ),
+                button_for_login(context,texteditingcontroller_email.text,texteditingcontroller_password.text),
+                not_a_user_signup(context),
                 Container(
                   margin: EdgeInsets.only(top: 20),
                   child: Row(

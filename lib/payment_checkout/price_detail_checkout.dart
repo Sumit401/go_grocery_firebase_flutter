@@ -225,6 +225,7 @@ class _price_detail_checkoutState extends State<price_detail_checkout> {
                                 elevation: MaterialStateProperty.all(10)),
                             onPressed: () {
                               payment_razorpay(
+                                  context,
                                   total_payable_amount,
                                   cart_value.toString(),
                                   user_name.text,

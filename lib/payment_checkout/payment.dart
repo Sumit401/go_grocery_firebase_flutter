@@ -1,17 +1,22 @@
+import 'package:cabs/homepage/homepage.dart';
 import 'package:cabs/reusable_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 var firebase_auth = FirebaseFirestore.instance.collection("orders");
+var fire_storedb=FirebaseFirestore.instance.collection("cart").snapshots();
 int totalPayableAmount = 0;
 String no_of_items = "";
 String userName = "";
+var buildcontext;
 String userEmail = "";
 String userContactno = "";
 String userAddress = "";
 var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 void payment_razorpay(
+    BuildContext context,
     int totalPayableAmountLoc,
     String noOfItemsLoc,
     String userNameLoc,
@@ -33,6 +38,7 @@ void payment_razorpay(
     }
   };
 
+  buildcontext=context;
   totalPayableAmount = totalPayableAmountLoc;
   no_of_items = noOfItemsLoc;
   userName = userNameLoc;
@@ -67,6 +73,17 @@ Future<void> handlePaymentSuccessResponse(
     "signature": response.signature,
   };
   firebase_auth.doc().set(orderData); // Set order_data to firebase
+
+  FirebaseFirestore.instance.collection('Cart').get().then((value) {
+        value.docs.forEach((element) {
+          element.data().forEach((key, value2) {
+            if(key=="email"&& value2==userEmail){
+              FirebaseFirestore.instance.collection("Cart").doc(element.id).delete();
+            }
+          });
+        });
+      },);
+  Navigator.pushReplacement(buildcontext, MaterialPageRoute(builder: (context) => homepage()) );
 
 }
 

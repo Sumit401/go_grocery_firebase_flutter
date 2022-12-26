@@ -1,16 +1,17 @@
 import 'package:cabs/main_screens/login_page.dart';
+import 'package:cabs/main_screens/social_media_login.dart';
 import 'package:cabs/profile/dialog_box.dart';
 import 'package:cabs/profile/my_orders.dart';
-import 'package:cabs/reusable_widgets.dart';
 import 'package:flutter/material.dart';
-
 
 Widget profile_navigations(BuildContext context, String tab){
   return Container(
+    margin: EdgeInsets.only(top: 10),
     padding: EdgeInsets.symmetric(horizontal: 20),
     width: MediaQuery.of(context).size.width,
     child: ElevatedButton(
       style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.all(10)),
         elevation: MaterialStateProperty.all(10),
         backgroundColor:
         MaterialStateProperty.all(Colors.lightBlueAccent),
