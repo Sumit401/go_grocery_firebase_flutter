@@ -72,7 +72,7 @@ class _login_pageState extends State<login_page> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                      google_sign_in_buttons(context),
-                      facebook_sign_in_button()
+                      //facebook_sign_in_button()
                     ],
                   ),
                 ),

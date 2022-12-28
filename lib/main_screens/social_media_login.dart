@@ -32,14 +32,23 @@ Widget google_sign_in_buttons(BuildContext context) {
             throw e;
           }
         },
-        style: const ButtonStyle(
-            shape: MaterialStatePropertyAll(CircleBorder()),
-            backgroundColor:
-            MaterialStatePropertyAll(Colors.white)),
-        child: Image.asset(
-          "assets/images/google_logo.png",
-          width: 50,
-          height: 50,
+
+        style: ButtonStyle(
+          shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+          padding: const MaterialStatePropertyAll((EdgeInsets.only(right: 15,top: 3,bottom: 3,left: 8))),
+          alignment: Alignment.center,
+            backgroundColor: const MaterialStatePropertyAll(Colors.white)),
+        child: Row(
+          children: [
+            Image.asset(
+              alignment: Alignment.center,
+              "assets/images/google_logo.png",
+              width: 50,
+              height: 50,
+            ),
+            VerticalDivider(width: 10,),
+            Text("Sign in with Google",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.bold),)
+          ],
         ),
       );
 }

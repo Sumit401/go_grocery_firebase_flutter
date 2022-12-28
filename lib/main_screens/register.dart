@@ -88,7 +88,7 @@ class _registerState extends State<register> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         google_sign_in_buttons(context),
-                        facebook_sign_in_button()
+                        //facebook_sign_in_button()
                       ],
                     ),
                   ),

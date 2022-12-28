@@ -26,7 +26,7 @@ void payment_razorpay(
   Razorpay razorpay = Razorpay();
 
   var options = {
-    'key': 'rzp_test_iF5Qixth5xOJl6',
+    'key': 'rzp_live_ILgsfZCZoFIKMb',
     'amount': totalPayableAmountLoc * 100,
     'name': 'Go Grocery',
     'description': 'Grocery',

@@ -66,25 +66,35 @@ Future<bool?> short_flutter_toast(String message){
 }
 
 
-Future<int> getcart_item_pricecount() async{
-  int cartValue=0;
-  int cartPrice=0;
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  var email = sharedPreferences.getString("user_email").toString();
-  FirebaseFirestore.instance.collection("Cart").get().then((value) {
-    value.docs.forEach((element) {
-      FirebaseFirestore.instance.collection("Cart").doc(element.id).get().then((value2) => {
-        if(value2.data()!['email']==email){
-          cartValue = cartValue + (value2.data()!['quantity']) as int,
-          cartPrice = cartPrice + ((value2.data()!['price']) as int) * ((value2.data()!['quantity']) as int),
-          sharedPreferences.setInt("cart_price", cartPrice),
-          sharedPreferences.setInt("cart_value", cartValue),
-        }
+Future<int> getcart_item_pricecount() async {
+  int cartValue = 0;
+  int cartPrice = 0;
+  if (true) {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var email = sharedPreferences.getString("user_email").toString();
+    await FirebaseFirestore.instance.collection("Cart").get().then((
+        value) async {
+      value.docs.forEach((element) async {
+        await FirebaseFirestore.instance.collection("Cart")
+            .doc(element.id)
+            .get()
+            .then((value2) =>
+        {
+          if(value2.data()!['email'] == email){
+            cartValue = cartValue + (value2.data()!['quantity']) as int,
+            cartPrice = cartPrice + ((value2.data()!['price']) as int) *
+                ((value2.data()!['quantity']) as int),
+            sharedPreferences.setInt("cart_price", cartPrice),
+            sharedPreferences.setInt("cart_value", cartValue),
+            print(cartValue)
+          }
+        });
       });
     });
-  });
-    return(cartValue);
+    print("A $cartValue");
+    return (cartValue);
   }
+}
 
 Widget checkout_button(BuildContext context){
   return Container(
